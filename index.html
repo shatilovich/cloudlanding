@@ -1,0 +1,1230 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>WB Cloud</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="WB Cloud — частное облако Wildberries: виртуальные машины, управляемые базы данных и сети внутри контура WB.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Fira+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: reference grid — thin-ruled cells on deep violet, mono section labels, slashed headlines, isometric (pseudo-3D) SVG scenes instead of WebGL */
+:root{
+  --bg:#0f0c1e; --bg-2:#120e25; --cell:#17122c; --cell-2:#1c1636;
+  --light:#ead9ff; --body:#d8cde4; --muted:rgba(216,205,228,.62); --faint:rgba(216,205,228,.38);
+  --accent:#a73afd; --accent-hover:#b558ff; --accent-2:#c79bff; --pink:#ff49d7;
+  --line:rgba(255,255,255,.1); --line-2:rgba(255,255,255,.18);
+  --ok:#6fdcb4; --mid:#f5c26b; --high:#ff6b9a;
+  --iso-top:#2e2553; --iso-left:#1e1838; --iso-right:#16112b; --iso-edge:rgba(234,217,255,.16);
+  --iso-acc-top:#c08bff; --iso-acc-left:#8a2fe0; --iso-acc-right:#6a1fbb;
+  --iso-pink-top:#ff8ae6; --iso-pink-left:#d43bb4; --iso-pink-right:#a52a8c;
+  --f-display:"Google Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-body:"Google Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"Fira Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --pad:80px; --max:1440px; --header-h:72px;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{background:var(--bg);scroll-behavior:smooth;scroll-padding-top:calc(var(--header-h) + 8px)}
+body{background:var(--bg);color:var(--body);font-family:var(--f-body);font-optical-sizing:auto;font-variation-settings:"GRAD" 0;font-size:16px;line-height:1.5;margin:0;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+::selection{background:var(--accent);color:#fff}
+:focus-visible{outline:2px solid var(--accent-2);outline-offset:3px}
+h1,h2,h3{text-wrap:balance}
+.wrap{max-width:var(--max);margin:0 auto;padding-left:max(var(--pad),env(safe-area-inset-left,0px));padding-right:max(var(--pad),env(safe-area-inset-right,0px))}
+.mono{font-family:var(--f-mono);font-size:12px;line-height:16px;font-weight:500;letter-spacing:.05em;text-transform:uppercase}
+.tnum{font-variant-numeric:tabular-nums}
+.hatch{background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.028) 0 1px,transparent 1px 11px)}
+.dots{background-image:radial-gradient(rgba(234,217,255,.12) 1px,transparent 1.2px);background-size:24px 24px}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:10px;height:48px;padding:0 22px;border-radius:14px;background:var(--accent);color:#fff;font-weight:500;font-size:16px;transition:background .2s,transform .2s;white-space:nowrap}
+.btn:hover{background:var(--accent-hover)}
+.btn:active{transform:scale(.97)}
+.btn--line{background:transparent;border:1px solid var(--line-2);color:var(--light)}
+.btn--line:hover{background:rgba(255,255,255,.05);border-color:var(--accent-2)}
+.btn--sm{height:36px;padding:0 14px;border-radius:10px;font-size:14px}
+.btn-ghost{display:inline-flex;align-items:center;gap:10px;color:var(--light);font-weight:500;transition:color .2s}
+.btn-ghost:hover{color:var(--accent-2)}
+.ico-plus{width:24px;height:24px;border-radius:7px;background:var(--accent);display:grid;place-items:center;color:#fff;font-size:15px;line-height:1}
+
+.ico-ext{display:inline-block;width:1.15em;height:1.15em;flex:none;vertical-align:-.2em;margin-left:.2em}
+.btn .ico-ext{margin-left:-4px}
+.btn--sm .ico-ext{margin-left:-6px;width:18px;height:18px}
+.mnav a .ico-ext{width:18px;height:18px}
+/* header */
+.header{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:50;height:var(--header-h);border-bottom:1px solid var(--line);background:rgba(15,12,30,.72);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);transition:transform .35s}
+.header.is-hidden{transform:translateY(-110%)}
+.header .wrap{height:100%;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.logo{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-display);font-weight:700;font-size:22px;letter-spacing:-.02em;color:var(--light)}
+.logo b{display:inline-grid;place-items:center;height:30px;padding:0 9px;border-radius:15px;background:linear-gradient(120deg,var(--pink),var(--accent));color:#fff;font-size:19px;font-weight:800;letter-spacing:-.03em}
+.logo svg{display:block;height:34px;width:auto;color:var(--light)}
+.footer .logo svg{height:30px}
+@media (max-width:719px){.header .logo svg{height:28px}}
+.nav{display:flex;gap:32px}
+.nav a{position:relative;font-size:13px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--body);transition:color .2s}
+.nav a::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:1px;background:var(--accent);transform:scaleX(0);transform-origin:0;transition:transform .3s}
+.nav a:hover,.nav a.is-active{color:var(--light)}
+.nav a.is-active::after{transform:scaleX(1)}
+.header__right{display:flex;align-items:center;gap:10px}
+.header__docs{font-size:14px;color:var(--body);margin-right:10px;transition:color .2s}
+.header__docs:hover{color:var(--light)}
+.burger{display:none;width:40px;height:40px;border:1px solid var(--line-2);border-radius:10px;place-items:center}
+.burger span{display:block;width:16px;height:1.5px;background:var(--light);box-shadow:0 5px 0 var(--light),0 -5px 0 var(--light)}
+.mnav{position:fixed;top:calc(var(--header-h) + env(safe-area-inset-top,0px));left:0;right:0;z-index:49;background:var(--bg-2);border-bottom:1px solid var(--line);padding:16px max(16px,env(safe-area-inset-right,0px)) 24px max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:4px}
+.mnav a{padding:12px 0;border-bottom:1px solid var(--line);font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--light)}
+.mnav .mnav__btns{display:flex;gap:10px;margin-top:16px}
+.mnav .mnav__btns a{border:0;padding:0 14px;flex:1;justify-content:center}
+
+/* section scaffolding */
+.section{position:relative;padding-block:112px;border-bottom:1px solid var(--line)}
+.s-label{display:flex;align-items:center;gap:12px;margin-bottom:44px;color:var(--muted)}
+.s-label__num{opacity:.7}
+.s-label__dash{width:32px;height:1px;background:var(--line-2)}
+.s-label__name{color:var(--body)}
+.s-label__rule{flex:1;height:1px;background:var(--line)}
+.s-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,400px);gap:24px 64px;align-items:end;margin-bottom:48px}
+.h-slash{margin:0;font-family:var(--f-display);font-weight:600;font-size:clamp(30px,3.4vw,48px);line-height:1.12;letter-spacing:-.015em;color:var(--light)}
+.h-slash .sl{color:rgba(255,255,255,.22);font-weight:400}
+.lead{margin:0;font-size:17px;line-height:26px;color:var(--body);max-width:62ch}
+
+/* chips / tags */
+.tag{display:inline-flex;align-items:center;height:22px;padding:0 7px;border-radius:4px;background:rgba(255,255,255,.06);color:var(--body);font-family:var(--f-mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.tag--beta{background:rgba(167,58,253,.18);color:var(--accent-2)}
+.tag--soon{background:transparent;border:1px solid var(--line-2);color:var(--muted)}
+.tag--live{background:rgba(111,220,180,.12);color:var(--ok)}
+.seg{display:inline-flex;padding:3px;gap:2px;border:1px solid var(--line-2);border-radius:12px;background:rgba(255,255,255,.02)}
+.seg button{height:34px;padding:0 14px;border-radius:9px;font-size:14px;color:var(--body);transition:background .2s,color .2s;white-space:nowrap}
+.seg button:hover{color:var(--light)}
+.seg button[aria-pressed="true"]{background:var(--cell-2);color:var(--light);box-shadow:inset 0 0 0 1px rgba(199,155,255,.45)}
+
+/* ===== HERO ===== */
+.hero{position:relative;padding-top:calc(var(--header-h) + env(safe-area-inset-top,0px));border-bottom:1px solid var(--line);overflow:hidden}
+.hero__glow{position:absolute;pointer-events:none;width:960px;height:640px;top:80px;right:-160px;background:radial-gradient(closest-side,rgba(167,58,253,.28),transparent)}
+.hero__grid{position:relative;display:grid;grid-template-columns:minmax(0,480px) minmax(0,1fr);gap:24px 48px;padding-block:56px 48px;align-items:center}
+.hero__text{position:relative;z-index:2;display:flex;flex-direction:column;gap:28px;align-self:start;padding-top:24px}
+.hero__eyebrow{color:var(--accent-2);display:flex;gap:10px;align-items:center}
+.hero__eyebrow i{width:6px;height:6px;background:var(--accent);display:inline-block}
+.hero__title{margin:0;font-family:var(--f-display);font-weight:700;text-transform:uppercase;font-size:clamp(44px,5.4vw,80px);line-height:1;letter-spacing:-.02em;color:var(--light)}
+.hero__title em{font-style:normal;color:var(--accent-2)}
+.hero__lead{margin:0;font-size:19px;line-height:29px;max-width:470px}
+.hero__actions{display:flex;flex-wrap:wrap;align-items:center;gap:14px 24px}
+.split{display:inline-flex;border-radius:14px;overflow:hidden}
+.split .btn{border-radius:0}
+.split .btn+.btn{border-left:1px solid rgba(255,255,255,.22)}
+.hero__stage{position:relative;min-width:0;display:flex;flex-direction:column;justify-content:center}
+#heroScene{padding:0}
+.iso-svg .avgfill{fill:var(--accent);opacity:.32;pointer-events:none}
+.iso-svg .code{font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;fill:var(--body)}
+.iso-svg .val{font-family:var(--f-display);font-weight:600;fill:var(--light);letter-spacing:-.02em}
+.iso-svg .val tspan{fill:var(--muted);font-weight:500}
+.tower.is-on .code,.tower:hover .code{fill:var(--light)}
+.iso-svg{display:block;width:100%;height:auto;overflow:visible}
+.iso-svg .f-top{fill:var(--iso-top)} .iso-svg .f-left{fill:var(--iso-left)} .iso-svg .f-right{fill:var(--iso-right)}
+.iso-svg .f-top,.iso-svg .f-left,.iso-svg .f-right{stroke:var(--iso-edge);stroke-width:.6;stroke-linejoin:round;transition:fill .25s}
+.iso-svg .acc .f-top{fill:var(--iso-acc-top)} .iso-svg .acc .f-left{fill:var(--iso-acc-left)} .iso-svg .acc .f-right{fill:var(--iso-acc-right)}
+.iso-svg .pink .f-top{fill:var(--iso-pink-top)} .iso-svg .pink .f-left{fill:var(--iso-pink-left)} .iso-svg .pink .f-right{fill:var(--iso-pink-right)}
+.iso-svg .plat .f-top{fill:#181230} .iso-svg .plat .f-left{fill:#120d26} .iso-svg .plat .f-right{fill:#0d091d}
+.iso-svg .gridline{stroke:rgba(234,217,255,.06);stroke-width:.6}
+.iso-svg .rack{stroke:rgba(234,217,255,.12);stroke-width:.6}
+.iso-svg .led{fill:var(--accent-2)}
+.iso-svg .wire{fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;opacity:.75;filter:drop-shadow(0 0 3px rgba(167,58,253,.8))}
+.iso-svg .packet{fill:#fff;filter:drop-shadow(0 0 4px var(--accent-2))}
+.iso-svg .lbl{font-family:var(--f-mono);font-size:8.5px;letter-spacing:.06em;fill:var(--body);text-transform:uppercase}
+.tlabel{opacity:0;transition:opacity .2s}
+.tlabel.pin,.tlabel.is-on{opacity:1}
+.iso-svg .lbl-box{fill:rgba(15,12,30,.85);stroke:var(--line-2);stroke-width:.6}
+.iso-svg .lvl-ok{fill:var(--ok)} .iso-svg .lvl-mid{fill:var(--mid)} .iso-svg .lvl-high{fill:var(--high)}
+.tower{cursor:pointer;outline:none}
+.tower:hover .f-top,.tower:focus-visible .f-top,.tower.is-on .f-top{fill:#5a3e98}
+.tower:hover .f-left,.tower:focus-visible .f-left,.tower.is-on .f-left{fill:#3b2a69}
+.tower:hover .f-right,.tower:focus-visible .f-right,.tower.is-on .f-right{fill:#2c1f52}
+.hero__card{position:relative;z-index:3;margin-top:8px;padding:20px 22px;border:1px solid rgba(255,255,255,.12);border-radius:16px;background:rgba(23,18,44,.86);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.hc__top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:4px}
+.hc__title{font-size:19px;font-weight:600;color:var(--light);line-height:1.25}
+.hc__sub{color:var(--muted);margin-bottom:14px;min-height:16px}
+#hcMeters{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0 20px}
+#hcMeters .meter{margin-bottom:0}
+.meter{display:grid;grid-template-columns:1fr auto;gap:6px 12px;align-items:baseline;margin-bottom:10px}
+.meter__name{font-size:14px;color:var(--body)}
+.meter__val{font-size:14px;font-weight:600;color:var(--light)}
+.meter__bar{grid-column:1/-1;height:4px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden}
+.meter__bar i{display:block;height:100%;border-radius:2px;background:var(--accent);transition:width .45s cubic-bezier(.2,.8,.2,1)}
+.meter__bar i.lvl-ok{background:var(--ok)} .meter__bar i.lvl-mid{background:var(--mid)} .meter__bar i.lvl-high{background:var(--high)}
+.hc__foot{display:flex;justify-content:space-between;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line);color:var(--accent-2)}
+.hero__hint{color:var(--faint);margin-top:6px}
+.hero__stats{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line)}
+.hero__stats>div{padding:22px 24px 24px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:4px}
+.hero__stats>div:first-child{padding-left:0}
+.hero__stats>div:last-child{border-right:0}
+.stat__v{font-size:30px;font-weight:500;color:var(--light);letter-spacing:-.01em;line-height:1.15}
+.stat__k{color:var(--muted)}
+
+/* ===== MONITORING ===== */
+.mon-bar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;margin-bottom:20px}
+.legend{display:flex;flex-wrap:wrap;gap:18px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend i{width:8px;height:8px;display:inline-block}
+.zones{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.zone{position:relative;padding:22px 22px 24px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:16px;min-width:0;transition:background .25s}
+.zone:hover{background:var(--cell)}
+.zone__head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.zone__name{font-size:18px;font-weight:600;color:var(--light);line-height:1.25}
+.zone__code{color:var(--faint);margin-top:4px}
+.zone__big{display:flex;align-items:baseline;gap:8px}
+.zone__big b{font-size:40px;font-weight:500;line-height:1;color:var(--light);letter-spacing:-.02em}
+.zone__big span{color:var(--muted)}
+.loadbar{position:relative;height:10px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.07) 0 3px,transparent 3px 5px)}
+.loadbar .mx{position:absolute;inset:0 auto 0 0;background:repeating-linear-gradient(90deg,currentColor 0 3px,transparent 3px 5px);opacity:.45;transition:width .45s}
+.loadbar .av{position:absolute;inset:0 auto 0 0;background:repeating-linear-gradient(90deg,currentColor 0 3px,transparent 3px 5px);transition:width .45s}
+.loadbar-legend{display:flex;justify-content:space-between;color:var(--faint)}
+.minis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding-top:14px;border-top:1px solid var(--line)}
+.mini__k{color:var(--faint)}
+.mini__v{font-size:15px;font-weight:600;color:var(--light);margin:2px 0 6px}
+.mini__bar{height:3px;background:rgba(255,255,255,.07)}
+.mini__bar i{display:block;height:100%;background:var(--accent-2)}
+.hosts{display:flex;flex-wrap:wrap;gap:6px}
+.hosts .tag{text-transform:none;letter-spacing:0;font-size:11.5px}
+.zone .dot{width:8px;height:8px;margin-top:8px;flex:none}
+.lvl-c-ok{color:var(--ok)} .lvl-c-mid{color:var(--mid)} .lvl-c-high{color:var(--high)}
+.bg-ok{background:var(--ok)} .bg-mid{background:var(--mid)} .bg-high{background:var(--high)}
+.mon-note{margin-top:16px;color:var(--faint)}
+
+/* ===== SERVICES ===== */
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.chip{height:36px;padding:0 14px;border-radius:10px;border:1px solid var(--line-2);font-size:14px;color:var(--body);transition:border-color .2s,color .2s,background .2s}
+.chip:hover{color:var(--light);border-color:var(--accent-2)}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip small{font-family:var(--f-mono);font-size:11px;opacity:.7;margin-left:6px}
+.svc-groups{border-top:1px solid var(--line)}
+.svc-group{display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);border-bottom:1px solid var(--line)}
+.svc-group__aside{padding:28px 28px 28px 0;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+.svc-group__name{font-size:20px;font-weight:600;color:var(--light)}
+.svc-group__aside p{margin:0;color:var(--muted);font-size:14px;line-height:20px}
+.svc-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.svc{position:relative;padding:24px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);margin:0 -1px -1px 0;display:flex;flex-direction:column;gap:12px;min-height:200px;transition:background .25s}
+.svc:hover{background:var(--cell)}
+.svc__top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.svc__ico{width:52px;height:46px;flex:none}
+.svc__name{font-size:20px;font-weight:500;color:var(--light);line-height:1.2}
+.svc.is-soon .svc__name{color:var(--muted)}
+.svc__desc{margin:0;color:var(--body);opacity:.85;font-size:14px;line-height:20px}
+.svc__meta{margin-top:auto;color:var(--faint);font-size:13px;line-height:18px}
+
+/* ===== CALCULATOR ===== */
+.calc{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,480px);border:1px solid var(--line);border-radius:4px}
+.calc__form{padding:8px 32px 32px;border-right:1px solid var(--line);min-width:0}
+.fld{padding:24px 0;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:14px}
+.fld:last-child{border-bottom:0}
+.fld__head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.fld__label{color:var(--muted)}
+.fld__hint{color:var(--faint);font-size:13px;line-height:18px}
+.row{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center}
+.row--2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+#cEnv{display:flex;width:100%}
+#cEnv button{flex:1 1 0;min-width:0;justify-content:center}
+.flavors{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.flavor{padding:10px 12px;border:1px solid var(--line-2);border-radius:10px;text-align:left;transition:border-color .2s,background .2s;min-width:0}
+.flavor:hover{border-color:var(--accent-2)}
+.flavor[aria-pressed="true"]{border-color:var(--accent);background:rgba(167,58,253,.14)}
+.flavor b{display:block;font-size:16px;color:var(--light);font-weight:600}
+.flavor span{display:block;font-family:var(--f-mono);font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.slider{display:flex;flex-direction:column;gap:8px;min-width:0}
+.slider__top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.slider__name{font-size:14px;color:var(--body)}
+.slider__val{font-size:18px;font-weight:600;color:var(--light)}
+.slider__val small{font-size:13px;font-weight:400;color:var(--muted);margin-left:3px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:22px;background:transparent;--p:50%}
+input[type=range]::-webkit-slider-runnable-track{height:2px;background:linear-gradient(90deg,var(--accent) var(--p),rgba(255,255,255,.14) var(--p))}
+input[type=range]::-moz-range-track{height:2px;background:rgba(255,255,255,.14)}
+input[type=range]::-moz-range-progress{height:2px;background:var(--accent)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;margin-top:-8px;border-radius:4px;background:var(--accent);border:3px solid var(--bg);box-shadow:0 0 0 1px var(--accent-2)}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:4px;background:var(--accent);border:3px solid var(--bg);box-shadow:0 0 0 1px var(--accent-2)}
+input[type=range]:focus-visible{outline:none}
+input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(--accent-2)}
+.scale{display:flex;justify-content:space-between;color:var(--faint);font-family:var(--f-mono);font-size:11px}
+.select{position:relative}
+.select select{-webkit-appearance:none;appearance:none;width:100%;height:44px;padding:0 40px 0 14px;border:1px solid var(--line-2);border-radius:10px;background:var(--bg-2);color:var(--light);font:inherit;font-size:15px;cursor:pointer}
+.select::after{content:"";position:absolute;right:16px;top:50%;width:7px;height:7px;border-right:1.5px solid var(--body);border-bottom:1.5px solid var(--body);transform:translateY(-70%) rotate(45deg);pointer-events:none}
+.select select:hover{border-color:var(--accent-2)}
+.switch{display:inline-flex;align-items:center;gap:12px;cursor:pointer;font-size:15px;color:var(--light)}
+.switch input{position:absolute;opacity:0;width:1px;height:1px}
+.switch i{position:relative;width:40px;height:24px;border-radius:12px;background:rgba(255,255,255,.14);transition:background .2s;flex:none}
+.switch i::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .2s}
+.switch input:checked+i{background:var(--accent)}
+.switch input:checked+i::after{transform:translateX(16px)}
+.switch input:focus-visible+i{outline:2px solid var(--accent-2);outline-offset:3px}
+.svc-rows{display:flex;flex-direction:column;gap:8px}
+.svc-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:10px 10px 10px 14px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.015)}
+.svc-row__name{font-weight:500;color:var(--light);font-size:15px}
+.svc-row__spec{font-family:var(--f-mono);font-size:11px;color:var(--muted);letter-spacing:.03em}
+.stepper{display:inline-flex;align-items:center;border:1px solid var(--line-2);border-radius:9px;overflow:hidden}
+.stepper button{width:32px;height:32px;color:var(--light);font-size:16px;transition:background .2s}
+.stepper button:hover:not(:disabled){background:rgba(255,255,255,.07)}
+.stepper button:disabled{opacity:.3;cursor:default}
+.stepper output{min-width:34px;text-align:center;font-weight:600;color:var(--light);font-size:14px}
+.x-btn{width:32px;height:32px;border-radius:8px;color:var(--muted);font-size:18px;line-height:1}
+.x-btn:hover{color:var(--light);background:rgba(255,255,255,.06)}
+.add-row{display:flex;gap:8px}
+.add-row{align-items:stretch}
+.add-row .select{flex:1}
+.add-row .btn{height:44px;border-radius:10px}
+.calc__res{position:relative;min-width:0;display:flex;flex-direction:column}
+.calc__sticky{position:sticky;top:calc(var(--header-h) + 16px);display:flex;flex-direction:column}
+.res__viz{position:relative;border-bottom:1px solid var(--line);padding:18px 24px 6px}
+.res__viz .mono{color:var(--muted)}
+.res__vizsvg{height:220px;display:flex;align-items:center;justify-content:center}
+.res__vizsvg svg{max-height:100%;width:auto;max-width:100%}
+.res__legend{display:flex;gap:16px;color:var(--muted);padding-bottom:12px}
+.res__legend span{display:inline-flex;gap:7px;align-items:center}
+.res__legend i{width:8px;height:8px;display:inline-block}
+.res__block{padding:20px 24px;border-bottom:1px solid var(--line)}
+.totals{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.tot__v{font-size:22px;font-weight:500;color:var(--light);line-height:1.2;white-space:nowrap}
+.tot__k{color:var(--faint)}
+.quota{display:flex;flex-direction:column;gap:12px;margin-top:4px}
+.q{display:grid;grid-template-columns:80px minmax(0,1fr) auto;gap:12px;align-items:center;font-size:13px}
+.q__k{color:var(--muted);font-family:var(--f-mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase}
+.q__bar{position:relative;height:6px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden}
+.q__bar i{position:absolute;inset:0 auto 0 0;background:var(--accent);border-radius:3px;transition:width .35s}
+.q__bar i.over{background:var(--high)}
+.q__v{color:var(--body);white-space:nowrap}
+.notes{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.note{display:grid;grid-template-columns:8px minmax(0,1fr);gap:10px;align-items:start;font-size:13px;line-height:19px;color:var(--body)}
+.note::before{content:"";width:8px;height:8px;margin-top:5px;background:var(--accent-2)}
+.note--warn::before{background:var(--mid)}
+.note--crit::before{background:var(--high)}
+.note--ok::before{background:var(--ok)}
+.note b{color:var(--light);font-weight:500}
+.price{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.price__v{font-size:40px;font-weight:600;letter-spacing:-.02em;color:var(--light);line-height:1}
+.price__k{color:var(--muted)}
+.breakdown{display:flex;flex-direction:column;gap:6px;margin-top:16px;font-size:14px}
+.breakdown div{display:flex;justify-content:space-between;gap:12px;color:var(--body)}
+.breakdown div span:last-child{color:var(--light)}
+.compare{margin-top:18px;display:flex;flex-direction:column;gap:8px}
+.cmp{display:grid;grid-template-columns:110px minmax(0,1fr);gap:12px;align-items:center}
+.cmp__k{font-family:var(--f-mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.cmp__bar{height:18px;position:relative}
+.cmp__bar i{position:absolute;inset:0 auto 0 0;transition:width .35s}
+.cmp__bar.rent i{background:repeating-linear-gradient(90deg,rgba(234,217,255,.35) 0 3px,transparent 3px 5px)}
+.cmp__bar.own i{background:repeating-linear-gradient(90deg,var(--accent) 0 3px,transparent 3px 5px)}
+.cmp__bar b{position:absolute;top:50%;transform:translateY(-50%);font-family:var(--f-mono);font-size:11px;font-weight:500;color:var(--light);white-space:nowrap;padding-left:8px;transition:left .35s}
+.res__actions{padding:20px 24px 24px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.res__actions .copied{color:var(--ok);font-size:13px}
+.demo-mark{color:var(--mid)}
+
+/* ===== ROADMAP ===== */
+.road{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border:1px solid var(--line);border-radius:4px}
+.lane{padding:28px 28px 32px;border-right:1px solid var(--line);min-width:0}
+.lane:last-child{border-right:0}
+.lane__head{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.lane__q{font-size:30px;font-weight:500;color:var(--light);letter-spacing:-.01em}
+.track{position:relative;display:flex;flex-direction:column;gap:0;padding-left:28px}
+.track::before{content:"";position:absolute;left:5px;top:10px;bottom:10px;width:1px;background:linear-gradient(var(--accent),rgba(167,58,253,.1))}
+.ms{position:relative;padding:12px 0 14px;border-bottom:1px solid var(--line)}
+.ms:last-child{border-bottom:0}
+.ms::before{content:"";position:absolute;left:-28px;top:18px;width:11px;height:11px;border:1px solid var(--accent-2);background:var(--bg)}
+.ms:hover::before{background:var(--accent)}
+.ms__name{font-size:18px;font-weight:500;color:var(--light)}
+.ms__desc{margin:2px 0 0;color:var(--muted);font-size:14px;line-height:20px}
+
+/* ===== NEWS ===== */
+.news{border-top:1px solid var(--line)}
+.post{border-bottom:1px solid var(--line)}
+.post__btn{width:100%;display:grid;grid-template-columns:130px minmax(0,1fr) auto 32px;gap:24px;align-items:center;padding:22px 0;text-align:left}
+.post__date{color:var(--muted)}
+.post__title{font-size:19px;font-weight:500;color:var(--light);line-height:1.3}
+.post__tags{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
+.post__arr{width:28px;height:28px;border-radius:50%;border:1px solid rgba(167,58,253,.8);display:grid;place-items:center;color:var(--accent-2);transition:transform .25s,background .25s}
+.post__btn:hover .post__title{color:var(--accent-2)}
+.post__btn[aria-expanded="true"] .post__arr{transform:rotate(45deg);background:var(--accent);color:#fff}
+.post__body{padding:0 56px 26px 154px}
+.post__body ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;max-width:72ch}
+.post__body li{position:relative;padding-left:18px;font-size:15px;line-height:23px;color:var(--body)}
+.post__body li::before{content:"//";position:absolute;left:0;top:0;font-family:var(--f-mono);font-size:11px;color:var(--accent-2)}
+.post__body code{font-family:var(--f-mono);font-size:13px;color:var(--accent-2)}
+.news__more{margin-top:28px}
+
+/* ===== HELP CTA ===== */
+.help{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-left:1px solid var(--line);border-right:1px solid var(--line)}
+.help__text{padding:72px 48px 72px 24px;display:flex;flex-direction:column;gap:22px;border-right:1px solid var(--line);align-items:flex-start}
+.help__eyebrow{color:var(--accent)}
+.help__links{display:flex;flex-wrap:wrap;gap:10px}
+.help__art{display:flex;align-items:center;justify-content:center;padding:32px;min-width:0}
+.help__art svg{width:100%;max-width:440px;height:auto}
+
+/* footer */
+.footer{padding-block:44px 32px}
+.footer__top{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;padding-bottom:28px;border-bottom:1px solid var(--line)}
+.footer__nav{display:flex;flex-wrap:wrap;gap:12px 28px}
+.footer__nav a{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--body)}
+.footer__nav a:hover{color:var(--light)}
+.footer__bot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:20px;color:var(--faint)}
+.footer__bot a:hover{color:var(--light)}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width:1240px){
+  :root{--pad:48px}
+  .nav{gap:22px}
+  .header__docs{display:none}
+  .zones{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .calc{grid-template-columns:minmax(0,1fr) minmax(0,420px)}
+  .flavors{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:1023px){
+  :root{--pad:32px;--header-h:64px}
+  .nav,.header__right .btn{display:none}
+  .burger{display:grid}
+  .section{padding-block:80px}
+  .s-head{grid-template-columns:minmax(0,1fr);margin-bottom:36px}
+  .hero__grid{grid-template-columns:minmax(0,1fr);min-height:0;padding-block:40px 32px;gap:12px}
+  .hero__text{padding-top:0}
+  .hero__stage{padding-top:8px}
+  #hcMeters{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 20px}
+  .hero__stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hero__stats>div:nth-child(2){border-right:0}
+  .hero__stats>div:nth-child(3){padding-left:0}
+  .hero__stats>div:nth-child(n+3){border-top:1px solid var(--line)}
+  .svc-group{grid-template-columns:minmax(0,1fr)}
+  .svc-group__aside{border-right:0;border-bottom:1px solid var(--line);padding:24px 0}
+  .calc{grid-template-columns:minmax(0,1fr)}
+  .calc__form{border-right:0;border-bottom:1px solid var(--line)}
+  .calc__sticky{position:static}
+  .help{grid-template-columns:minmax(0,1fr)}
+  .help__text{border-right:0;border-bottom:1px solid var(--line);padding:56px 24px}
+  .post__body{padding-left:0;padding-right:0}
+  .post__btn{grid-template-columns:110px minmax(0,1fr) 32px}
+  .post__tags{display:none}
+}
+@media (max-width:719px){
+  :root{--pad:16px}
+  .section{padding-block:64px}
+  .s-label{margin-bottom:28px}
+  .hero__title{font-size:clamp(38px,11vw,56px)}
+  .hero__lead{font-size:17px;line-height:26px}
+  .iso-svg .lbl,.iso-svg .lbl-box,.iso-svg .lbl-dot{display:none}
+  .hero__card{padding:18px}
+  #hcMeters{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .iso-svg .code{display:none}
+  .stat__v{font-size:24px}
+  .hero__stats>div{padding:18px 12px 18px 16px}
+  .zones{grid-template-columns:minmax(0,1fr)}
+  .mon-bar{flex-direction:column;align-items:flex-start}
+  .seg{max-width:100%;overflow-x:auto}
+  .calc__form{padding:0 16px 16px}
+  .row--2{grid-template-columns:minmax(0,1fr)}
+  .flavors{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .totals{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .res__block,.res__viz,.res__actions{padding-left:16px;padding-right:16px}
+  .res__vizsvg{height:180px}
+  .svc-row{grid-template-columns:minmax(0,1fr) auto;row-gap:8px}
+  .svc-row .x-btn{grid-row:1;grid-column:2}
+  .svc-row .stepper{grid-column:1/-1;justify-self:start}
+  .road{grid-template-columns:minmax(0,1fr)}
+  .lane{border-right:0;border-bottom:1px solid var(--line);padding:24px 16px}
+  .lane:last-child{border-bottom:0}
+  .post__btn{grid-template-columns:minmax(0,1fr) 32px;gap:6px 16px}
+  .post__date{grid-column:1/-1}
+  .post__title{font-size:17px}
+  .help__text{padding:48px 16px}
+  .cmp{grid-template-columns:90px minmax(0,1fr)}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important;scroll-behavior:auto!important}
+}
+</style>
+
+<header class="header" id="header">
+  <div class="wrap">
+    <a href="#top" class="logo" aria-label="WB Cloud — наверх"><svg viewBox="0 0 184 45" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M0 22.0503C0 9.87224 9.85885 0 22.0204 0H52.6171C64.7786 0 74.6374 9.87224 74.6374 22.0503C74.6374 34.2283 64.7786 44.1005 52.6171 44.1005H22.0204C9.85885 44.1005 0 34.2283 0 22.0503Z" fill="#FF00FF"/><path d="M16.72 33.9922L8.76306 13.0594H14.0954L18.8029 25.1585L23.4687 13.0594H26.6765L31.4256 25.2423L36.1331 13.0594H41.2155L33.2586 33.9922H29.8842L25.0101 21.4325L20.0943 33.9922H16.72Z" fill="#fff"/><path d="M42.6762 22.521V3.94003H47.6753V15.3201C49.6333 13.4361 52.2161 12.4732 54.799 12.4732C59.9231 12.4732 65.0888 16.1574 65.0888 23.5258C65.0888 30.0149 60.3397 34.5783 53.7992 34.5783C47.2587 34.5783 42.6762 30.0149 42.6762 22.521ZM47.6753 23.5258C47.6753 27.0843 50.1748 29.5963 53.7992 29.5963C57.4235 29.5963 59.9231 27.0843 59.9231 23.5258C59.9231 19.9672 57.4235 17.4552 53.7992 17.4552C50.1748 17.4552 47.6753 19.9672 47.6753 23.5258Z" fill="#fff"/><g fill="currentColor"><path d="M181.605 3.72604V34.8039H176.572V32.5361C174.601 34.4259 172.001 35.3919 169.401 35.3919C164.242 35.3919 159.042 31.6961 159.042 24.3046C159.042 16.9131 164.242 13.2174 169.401 13.2174C172.001 13.2174 174.601 14.1833 176.572 16.0732V3.72604H181.605ZM164.242 24.3046C164.242 27.8744 166.758 30.3942 170.407 30.3942C174.056 30.3942 176.572 27.8744 176.572 24.3046C176.572 20.7349 174.056 18.2151 170.407 18.2151C166.758 18.2151 164.242 20.7349 164.242 24.3046Z"/><path d="M156.332 13.8054V34.8039H151.3V32.1581C149.664 34.2999 147.147 35.3499 144.673 35.3499C140.353 35.3499 136.033 32.1161 136.033 25.6905V13.8054H141.066V25.6485C141.066 28.3784 143.163 30.3942 146.183 30.3942C149.203 30.3942 151.3 28.3784 151.3 25.6905V13.8054H156.332Z"/><path d="M115.995 24.3046C115.995 27.8744 118.511 30.3942 122.16 30.3942C125.809 30.3942 128.325 27.8744 128.325 24.3046C128.325 20.7349 125.809 18.215 122.16 18.215C118.511 18.215 115.995 20.7349 115.995 24.3046ZM133.526 24.3046C133.526 30.8142 128.744 35.3919 122.16 35.3919C115.575 35.3919 110.794 30.8142 110.794 24.3046C110.794 17.7951 115.575 13.2174 122.16 13.2174C128.744 13.2174 133.526 17.7951 133.526 24.3046Z"/><path d="M103.027 34.8039V3.72604H108.06V34.8039H103.027Z"/><path d="M91.4779 35.3919C84.8933 35.3919 80.3218 30.8142 80.3218 24.3046C80.3218 17.7951 84.8933 13.2174 91.4779 13.2174C95.5461 13.2174 98.4819 14.8553 100.831 18.383L96.972 21.2808C95.7138 19.349 93.7007 18.215 91.4779 18.215C87.8291 18.215 85.5224 20.7349 85.5224 24.3046C85.5224 27.8744 87.8291 30.3942 91.4779 30.3942C93.7846 30.3942 95.8396 29.1763 96.972 27.2444L100.914 29.9742C98.5238 33.628 95.5041 35.3919 91.4779 35.3919Z"/></g></svg></a>
+    <nav class="nav" aria-label="Разделы">
+      <a href="#zones">Мониторинг</a>
+      <a href="#services">Сервисы</a>
+      <a href="#calc">Калькулятор</a>
+      <a href="#roadmap">Роадмап</a>
+      <a href="#news">Обновления</a>
+    </nav>
+    <div class="header__right">
+      <a class="header__docs" href="https://docs.wb-cloud.ru/" target="_blank" rel="noopener">Документация</a>
+      <a class="btn btn--sm btn--line" href="https://cloud.tp.rwb.ru/" target="_blank" rel="noopener">Stage<svg class="ico-ext" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M5.29291 18.7071C4.90239 18.3166 4.90239 17.6834 5.29291 17.2929L14.5858 8.00003L8.5 8.00002C7.94771 8.00002 7.5 7.55231 7.5 7.00002C7.5 6.44774 7.94772 6.00002 8.5 6.00002L17 6.00004C17.2652 6.00004 17.5196 6.10539 17.7071 6.29293C17.8946 6.48047 18 6.73482 18 7.00004L18 15.5C18 16.0523 17.5523 16.5 17 16.5C16.4477 16.5 16 16.0523 16 15.5L16 9.41425L6.70712 18.7071C6.3166 19.0976 5.68343 19.0976 5.29291 18.7071Z"/></svg></a>
+      <a class="btn btn--sm" href="https://prod-cloud.tp.rwb.ru/" target="_blank" rel="noopener">Prod<svg class="ico-ext" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M5.29291 18.7071C4.90239 18.3166 4.90239 17.6834 5.29291 17.2929L14.5858 8.00003L8.5 8.00002C7.94771 8.00002 7.5 7.55231 7.5 7.00002C7.5 6.44774 7.94772 6.00002 8.5 6.00002L17 6.00004C17.2652 6.00004 17.5196 6.10539 17.7071 6.29293C17.8946 6.48047 18 6.73482 18 7.00004L18 15.5C18 16.0523 17.5523 16.5 17 16.5C16.4477 16.5 16 16.0523 16 15.5L16 9.41425L6.70712 18.7071C6.3166 19.0976 5.68343 19.0976 5.29291 18.7071Z"/></svg></a>
+      <button class="burger" id="burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="mnav"><span></span></button>
+    </div>
+  </div>
+</header>
+<nav class="mnav" id="mnav" hidden aria-label="Меню">
+  <a href="#zones">Мониторинг</a>
+  <a href="#services">Сервисы</a>
+  <a href="#calc">Калькулятор</a>
+  <a href="#roadmap">Роадмап</a>
+  <a href="#news">Обновления</a>
+  <a href="https://docs.wb-cloud.ru/" target="_blank" rel="noopener">Документация<svg class="ico-ext" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M5.29291 18.7071C4.90239 18.3166 4.90239 17.6834 5.29291 17.2929L14.5858 8.00003L8.5 8.00002C7.94771 8.00002 7.5 7.55231 7.5 7.00002C7.5 6.44774 7.94772 6.00002 8.5 6.00002L17 6.00004C17.2652 6.00004 17.5196 6.10539 17.7071 6.29293C17.8946 6.48047 18 6.73482 18 7.00004L18 15.5C18 16.0523 17.5523 16.5 17 16.5C16.4477 16.5 16 16.0523 16 15.5L16 9.41425L6.70712 18.7071C6.3166 19.0976 5.68343 19.0976 5.29291 18.7071Z"/></svg></a>
+  <div class="mnav__btns">
+    <a class="btn btn--sm btn--line" href="https://cloud.tp.rwb.ru/" target="_blank" rel="noopener">Консоль Stage</a>
+    <a class="btn btn--sm" href="https://prod-cloud.tp.rwb.ru/" target="_blank" rel="noopener">Консоль Prod</a>
+  </div>
+</nav>
+
+<main id="top">
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero__glow" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="hero__grid">
+      <div class="hero__text">
+        <h1 class="hero__title">Облако<br>для сервисов<br><em>RWB</em></h1>
+        <p class="hero__lead">Виртуальные машины, управляемые базы данных и сети внутри контура WB. Создавайте ресурсы сами — в веб-интерфейсе, через API или Terraform.</p>
+        <div class="hero__actions">
+          <div class="split">
+            <a class="btn" href="https://prod-cloud.tp.rwb.ru/" target="_blank" rel="noopener">Prod<svg class="ico-ext" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M5.29291 18.7071C4.90239 18.3166 4.90239 17.6834 5.29291 17.2929L14.5858 8.00003L8.5 8.00002C7.94771 8.00002 7.5 7.55231 7.5 7.00002C7.5 6.44774 7.94772 6.00002 8.5 6.00002L17 6.00004C17.2652 6.00004 17.5196 6.10539 17.7071 6.29293C17.8946 6.48047 18 6.73482 18 7.00004L18 15.5C18 16.0523 17.5523 16.5 17 16.5C16.4477 16.5 16 16.0523 16 15.5L16 9.41425L6.70712 18.7071C6.3166 19.0976 5.68343 19.0976 5.29291 18.7071Z"/></svg></a>
+            <a class="btn" href="https://cloud.tp.rwb.ru/" target="_blank" rel="noopener">Stage<svg class="ico-ext" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M5.29291 18.7071C4.90239 18.3166 4.90239 17.6834 5.29291 17.2929L14.5858 8.00003L8.5 8.00002C7.94771 8.00002 7.5 7.55231 7.5 7.00002C7.5 6.44774 7.94772 6.00002 8.5 6.00002L17 6.00004C17.2652 6.00004 17.5196 6.10539 17.7071 6.29293C17.8946 6.48047 18 6.73482 18 7.00004L18 15.5C18 16.0523 17.5523 16.5 17 16.5C16.4477 16.5 16 16.0523 16 15.5L16 9.41425L6.70712 18.7071C6.3166 19.0976 5.68343 19.0976 5.29291 18.7071Z"/></svg></a>
+          </div>
+        </div>
+      </div>
+      <div class="hero__stage">
+        <div id="heroScene" aria-label="Зоны доступности: высота столбца — пиковая загрузка гипервизоров, подсвеченная часть — средняя"></div>
+        
+        <aside class="hero__card" aria-live="polite">
+          <div class="hc__top">
+            <div class="hc__title" id="hcTitle">Платформа целиком</div>
+            <span class="tag tag--live">online</span>
+          </div>
+          <div class="hc__sub mono" id="hcSub">Все окружения · 8 зон · загрузка гипервизоров</div>
+          <div id="hcMeters"></div>
+          <div class="hc__foot mono"><span>Канал к ЦОД</span><span>400 Гбит/с</span></div>
+        </aside>
+      </div>
+    </div>
+    <div class="hero__stats">
+      <div><span class="stat__v tnum">≈56 000</span><span class="stat__k mono">виртуальных машин</span></div>
+      <div><span class="stat__v tnum" id="statZones">8</span><span class="stat__k mono" id="statZonesK">зон доступности</span></div>
+      <div><span class="stat__v tnum">8</span><span class="stat__k mono">управляемых сервисов</span></div>
+      <div><span class="stat__v tnum">2</span><span class="stat__k mono">окружения: Stage и Prod</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ZONES ===== -->
+<section class="section" id="zones">
+  <div class="wrap">
+    <div class="s-label mono"><span class="s-label__name">&gt; Мониторинг</span><span class="s-label__rule"></span></div>
+    <div class="s-head">
+      <h2 class="h-slash">Зоны доступности<br>Выбирайте ту, где свободнее</h2>
+      
+    </div>
+    <div class="mon-bar">
+      <div class="seg" role="group" aria-label="Окружение" id="envSeg">
+        <button aria-pressed="true" data-env="all">Все окружения</button>
+        <button aria-pressed="false" data-env="stage">Stage</button>
+        <button aria-pressed="false" data-env="prod">Prod</button>
+      </div>
+      <div class="row">
+        <div class="legend mono" aria-hidden="true">
+          <span><i class="bg-ok"></i>до 40%</span><span><i class="bg-mid"></i>40–59%</span><span><i class="bg-high"></i>от 60%</span>
+        </div>
+        <div class="seg" role="group" aria-label="Сортировка" id="sortSeg">
+          <button aria-pressed="true" data-sort="free">Свободнее</button>
+          <button aria-pressed="false" data-sort="name">А–Я</button>
+        </div>
+      </div>
+    </div>
+    <div class="zones" id="zonesGrid"></div>
+    <p class="mon-note mono">Данные на 29.10.2026 · полоса: яркая часть — средняя загрузка, бледная — пиковая</p>
+  </div>
+</section>
+
+<!-- ===== SERVICES ===== -->
+<section class="section" id="services">
+  <div class="wrap">
+    <div class="s-label mono"><span class="s-label__name">&gt; Сервисы и решения</span><span class="s-label__rule"></span></div>
+    <div class="s-head">
+      <h2 class="h-slash">Всё для продукта<br>в одном контуре</h2>
+      
+    </div>
+    <div class="filters" id="svcFilters" role="group" aria-label="Категории сервисов"></div>
+    <div class="svc-groups" id="svcGroups"></div>
+  </div>
+</section>
+
+<!-- ===== CALCULATOR ===== -->
+<section class="section" id="calc">
+  <div class="wrap">
+    <div class="s-label mono"><span class="s-label__name">&gt; Калькулятор ресурсов</span><span class="s-label__rule"></span></div>
+    <div class="s-head">
+      <h2 class="h-slash">Посчитайте ресурсы<br>до заявки на квоту</h2>
+      
+    </div>
+
+    <div class="calc">
+      <form class="calc__form" id="calcForm" autocomplete="off">
+        <div class="fld">
+          <div class="row--2">
+            <div class="slider">
+              <span class="fld__label mono">Окружение</span>
+              <div class="seg" role="group" aria-label="Окружение" id="cEnv">
+                <button type="button" aria-pressed="false" data-v="stage">Stage</button>
+                <button type="button" aria-pressed="true" data-v="prod">Prod</button>
+              </div>
+            </div>
+            <div class="slider">
+              <label class="fld__label mono" for="cZone">Зона доступности</label>
+              <div class="select"><select id="cZone"></select></div>
+            </div>
+          </div>
+          <div class="fld__hint" id="cZoneHint"></div>
+        </div>
+
+        <div class="fld">
+          <div class="fld__head"><span class="fld__label mono">Виртуальные машины · флейвор</span><span class="fld__hint">Флейворы в консоли появятся в Q4–Q1</span></div>
+          <div class="flavors" id="cFlavors" role="group" aria-label="Флейвор"></div>
+          <div class="row--2">
+            <div class="slider">
+              <div class="slider__top"><label class="slider__name" for="cCpu">vCPU на ВМ</label><output class="slider__val tnum" id="cCpuV" for="cCpu"></output></div>
+              <input type="range" id="cCpu" min="1" max="32" step="1">
+              <div class="scale"><span>1</span><span>16 база</span><span id="cCpuMax">32</span></div>
+            </div>
+            <div class="slider">
+              <div class="slider__top"><label class="slider__name" for="cRam">RAM на ВМ</label><output class="slider__val tnum" id="cRamV" for="cRam"></output></div>
+              <input type="range" id="cRam" min="1" max="128" step="1">
+              <div class="scale"><span>1 ГБ</span><span>64 база</span><span>128 ГБ</span></div>
+            </div>
+          </div>
+          <div class="row--2">
+            <div class="slider">
+              <div class="slider__top"><label class="slider__name" for="cCount">Количество ВМ</label><output class="slider__val tnum" id="cCountV" for="cCount"></output></div>
+              <input type="range" id="cCount" min="1" max="50" step="1">
+              <div class="scale"><span>1</span><span>50</span></div>
+            </div>
+            <div class="slider">
+              <label class="slider__name" for="cOs">Образ</label>
+              <div class="select"><select id="cOs">
+                <option value="debian13">Debian 13</option>
+                <option value="debian12">Debian 12</option>
+                <option value="centos" disabled>CentOS Stream 9 — скоро</option>
+                <option value="win" disabled>Windows Server 2025 — скоро</option>
+                <option value="astra" disabled>Astra 1.8.5 — скоро</option>
+                <option value="talos" disabled>Talos 1.13.3 — скоро</option>
+              </select></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fld">
+          <div class="fld__head"><span class="fld__label mono">Диск на каждую ВМ</span>
+            <div class="seg" role="group" aria-label="Тип диска" id="cDiskType">
+              <button type="button" aria-pressed="true" data-v="nvme">NVMe</button>
+              <button type="button" aria-pressed="false" data-v="ssd">SSD</button>
+            </div>
+          </div>
+          <div class="slider">
+            <div class="slider__top"><label class="slider__name" for="cDisk">Объём</label><output class="slider__val tnum" id="cDiskV" for="cDisk"></output></div>
+            <input type="range" id="cDisk" min="20" max="2048" step="10">
+            <div class="scale"><span>20 ГБ</span><span>1 ТБ</span><span>2 ТБ</span></div>
+          </div>
+        </div>
+
+        <div class="fld">
+          <div class="fld__head">
+            <label class="switch"><input type="checkbox" id="cBackup"><i></i>Резервное копирование ВМ</label>
+            <div class="seg" role="group" aria-label="Расписание" id="cFreq">
+              <button type="button" aria-pressed="true" data-v="daily">Ежедневно</button>
+              <button type="button" aria-pressed="false" data-v="weekly">Еженедельно</button>
+            </div>
+          </div>
+          <div class="slider" id="cCopiesWrap">
+            <div class="slider__top"><label class="slider__name" for="cCopies">Хранить копий</label><output class="slider__val tnum" id="cCopiesV" for="cCopies"></output></div>
+            <input type="range" id="cCopies" min="1" max="14" step="1">
+          </div>
+        </div>
+
+        <div class="fld">
+          <div class="fld__head"><span class="fld__label mono">Управляемые сервисы</span><span class="fld__hint">Размер ноды — по умолчанию для сервиса</span></div>
+          <div class="svc-rows" id="cSvcRows"></div>
+          <div class="add-row">
+            <div class="select"><select id="cSvcAdd" aria-label="Сервис для добавления"></select></div>
+            <button type="button" class="btn btn--sm btn--line" id="cSvcAddBtn">Добавить</button>
+          </div>
+        </div>
+      </form>
+
+      <div class="calc__res">
+        <div class="calc__sticky">
+          <div class="res__viz hatch">
+            <div class="mono">Конфигурация</div>
+            <div class="res__vizsvg" id="calcScene" aria-hidden="true"></div>
+            <div class="res__legend mono"><span><i style="background:var(--iso-acc-top)"></i>ВМ</span><span><i style="background:var(--iso-pink-top)"></i>Ноды сервисов</span></div>
+          </div>
+          <div class="res__block">
+            <div class="totals" id="rTotals"></div>
+          </div>
+          <div class="res__block">
+            <div class="fld__head" style="margin-bottom:14px"><span class="fld__label mono">Квота проекта</span><span class="fld__hint" id="rQuotaStatus"></span></div>
+            <div class="quota" id="rQuota"></div>
+            <div class="notes" id="rNotes"></div>
+          </div>
+          <div class="res__block">
+            <div class="price"><span class="price__v tnum" id="rPrice"></span><span class="price__k mono">₽ / месяц</span></div>
+            <div class="breakdown tnum" id="rBreak"></div>
+            <div class="compare" id="rCompare"></div>
+          </div>
+          <div class="res__actions">
+            <button type="button" class="btn" id="rCopy">Скопировать для заявки</button>
+            <button type="button" class="btn btn--line" id="rReset">Сбросить</button>
+            <span class="copied mono" id="rCopied" hidden>Скопировано</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ROADMAP ===== -->
+<section class="section" id="roadmap">
+  <div class="wrap">
+    <div class="s-label mono"><span class="s-label__name">&gt; Роадмап</span><span class="s-label__rule"></span></div>
+    <div class="s-head">
+      <h2 class="h-slash">Скоро в WB Cloud</h2>
+      
+    </div>
+    <div class="road" id="road"></div>
+  </div>
+</section>
+
+<!-- ===== NEWS ===== -->
+<section class="section" id="news">
+  <div class="wrap">
+    <div class="s-label mono"><span class="s-label__name">&gt; Обновления</span><span class="s-label__rule"></span></div>
+    <div class="s-head">
+      <h2 class="h-slash">Последние обновления</h2>
+    </div>
+    <div class="news" id="newsList"></div>
+    <div class="news__more"><button class="btn btn--line" id="newsMore">Показать ещё</button></div>
+  </div>
+</section>
+
+<!-- ===== HELP ===== -->
+<section style="border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="help">
+      <div class="help__text">
+        <div class="help__eyebrow mono">[ Поддержка ]</div>
+        <h2 class="h-slash">Остались вопросы<br>по облаку?</h2>
+        <p class="lead">Инструкции и API — в документации. Если не нашли ответ, напишите в канал cloud_support в Band.</p>
+        <div class="help__links">
+          <a class="btn" href="https://docs.wb-cloud.ru/" target="_blank" rel="noopener">Документация<svg class="ico-ext" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M5.29291 18.7071C4.90239 18.3166 4.90239 17.6834 5.29291 17.2929L14.5858 8.00003L8.5 8.00002C7.94771 8.00002 7.5 7.55231 7.5 7.00002C7.5 6.44774 7.94772 6.00002 8.5 6.00002L17 6.00004C17.2652 6.00004 17.5196 6.10539 17.7071 6.29293C17.8946 6.48047 18 6.73482 18 7.00004L18 15.5C18 16.0523 17.5523 16.5 17 16.5C16.4477 16.5 16 16.0523 16 15.5L16 9.41425L6.70712 18.7071C6.3166 19.0976 5.68343 19.0976 5.29291 18.7071Z"/></svg></a>
+          <a class="btn btn--line" href="https://band.wb.ru/wb/channels/cloud_support" target="_blank" rel="noopener">cloud_support<svg class="ico-ext" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M5.29291 18.7071C4.90239 18.3166 4.90239 17.6834 5.29291 17.2929L14.5858 8.00003L8.5 8.00002C7.94771 8.00002 7.5 7.55231 7.5 7.00002C7.5 6.44774 7.94772 6.00002 8.5 6.00002L17 6.00004C17.2652 6.00004 17.5196 6.10539 17.7071 6.29293C17.8946 6.48047 18 6.73482 18 7.00004L18 15.5C18 16.0523 17.5523 16.5 17 16.5C16.4477 16.5 16 16.0523 16 15.5L16 9.41425L6.70712 18.7071C6.3166 19.0976 5.68343 19.0976 5.29291 18.7071Z"/></svg></a>
+          <a class="btn btn--line" href="https://docs.wb-cloud.ru/faq.html" target="_blank" rel="noopener">FAQ<svg class="ico-ext" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M5.29291 18.7071C4.90239 18.3166 4.90239 17.6834 5.29291 17.2929L14.5858 8.00003L8.5 8.00002C7.94771 8.00002 7.5 7.55231 7.5 7.00002C7.5 6.44774 7.94772 6.00002 8.5 6.00002L17 6.00004C17.2652 6.00004 17.5196 6.10539 17.7071 6.29293C17.8946 6.48047 18 6.73482 18 7.00004L18 15.5C18 16.0523 17.5523 16.5 17 16.5C16.4477 16.5 16 16.0523 16 15.5L16 9.41425L6.70712 18.7071C6.3166 19.0976 5.68343 19.0976 5.29291 18.7071Z"/></svg></a>
+        </div>
+      </div>
+      <div class="help__art hatch" id="helpScene" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__top">
+      <a href="#top" class="logo" aria-label="WB Cloud — наверх"><svg viewBox="0 0 184 45" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M0 22.0503C0 9.87224 9.85885 0 22.0204 0H52.6171C64.7786 0 74.6374 9.87224 74.6374 22.0503C74.6374 34.2283 64.7786 44.1005 52.6171 44.1005H22.0204C9.85885 44.1005 0 34.2283 0 22.0503Z" fill="#FF00FF"/><path d="M16.72 33.9922L8.76306 13.0594H14.0954L18.8029 25.1585L23.4687 13.0594H26.6765L31.4256 25.2423L36.1331 13.0594H41.2155L33.2586 33.9922H29.8842L25.0101 21.4325L20.0943 33.9922H16.72Z" fill="#fff"/><path d="M42.6762 22.521V3.94003H47.6753V15.3201C49.6333 13.4361 52.2161 12.4732 54.799 12.4732C59.9231 12.4732 65.0888 16.1574 65.0888 23.5258C65.0888 30.0149 60.3397 34.5783 53.7992 34.5783C47.2587 34.5783 42.6762 30.0149 42.6762 22.521ZM47.6753 23.5258C47.6753 27.0843 50.1748 29.5963 53.7992 29.5963C57.4235 29.5963 59.9231 27.0843 59.9231 23.5258C59.9231 19.9672 57.4235 17.4552 53.7992 17.4552C50.1748 17.4552 47.6753 19.9672 47.6753 23.5258Z" fill="#fff"/><g fill="currentColor"><path d="M181.605 3.72604V34.8039H176.572V32.5361C174.601 34.4259 172.001 35.3919 169.401 35.3919C164.242 35.3919 159.042 31.6961 159.042 24.3046C159.042 16.9131 164.242 13.2174 169.401 13.2174C172.001 13.2174 174.601 14.1833 176.572 16.0732V3.72604H181.605ZM164.242 24.3046C164.242 27.8744 166.758 30.3942 170.407 30.3942C174.056 30.3942 176.572 27.8744 176.572 24.3046C176.572 20.7349 174.056 18.2151 170.407 18.2151C166.758 18.2151 164.242 20.7349 164.242 24.3046Z"/><path d="M156.332 13.8054V34.8039H151.3V32.1581C149.664 34.2999 147.147 35.3499 144.673 35.3499C140.353 35.3499 136.033 32.1161 136.033 25.6905V13.8054H141.066V25.6485C141.066 28.3784 143.163 30.3942 146.183 30.3942C149.203 30.3942 151.3 28.3784 151.3 25.6905V13.8054H156.332Z"/><path d="M115.995 24.3046C115.995 27.8744 118.511 30.3942 122.16 30.3942C125.809 30.3942 128.325 27.8744 128.325 24.3046C128.325 20.7349 125.809 18.215 122.16 18.215C118.511 18.215 115.995 20.7349 115.995 24.3046ZM133.526 24.3046C133.526 30.8142 128.744 35.3919 122.16 35.3919C115.575 35.3919 110.794 30.8142 110.794 24.3046C110.794 17.7951 115.575 13.2174 122.16 13.2174C128.744 13.2174 133.526 17.7951 133.526 24.3046Z"/><path d="M103.027 34.8039V3.72604H108.06V34.8039H103.027Z"/><path d="M91.4779 35.3919C84.8933 35.3919 80.3218 30.8142 80.3218 24.3046C80.3218 17.7951 84.8933 13.2174 91.4779 13.2174C95.5461 13.2174 98.4819 14.8553 100.831 18.383L96.972 21.2808C95.7138 19.349 93.7007 18.215 91.4779 18.215C87.8291 18.215 85.5224 20.7349 85.5224 24.3046C85.5224 27.8744 87.8291 30.3942 91.4779 30.3942C93.7846 30.3942 95.8396 29.1763 96.972 27.2444L100.914 29.9742C98.5238 33.628 95.5041 35.3919 91.4779 35.3919Z"/></g></svg></a>
+      <nav class="footer__nav" aria-label="Разделы в подвале">
+        <a href="#zones">Мониторинг</a><a href="#services">Сервисы</a><a href="#calc">Калькулятор</a><a href="#roadmap">Роадмап</a><a href="#news">Обновления</a>
+      </nav>
+    </div>
+    <div class="footer__bot mono">
+      <span>© 2026 RWB · WB Cloud</span>
+      <span><a href="https://cloud.tp.rwb.ru/" target="_blank" rel="noopener">Stage</a> · <a href="https://prod-cloud.tp.rwb.ru/" target="_blank" rel="noopener">Prod</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const fmt=n=>Math.round(n).toLocaleString('ru-RU');
+const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const lvl=v=>v>=60?'high':v>=40?'mid':'ok';
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- DATA ---------- */
+const ZONES=[
+ {id:'el',code:'EL',name:'WB Электросталь',hosts:['el.clv3','el1.v2.wb-cloud.ru','el1.v3.wb-cloud.ru','prod-6.cloud.el'],max:41,avg:10,cpu:34,ram:52,disk:32},
+ {id:'du',code:'DU',name:'WB Дубна',hosts:['du1.v2.wb-cloud.ru','du1.v3.wb-cloud.ru'],max:31,avg:4,cpu:17,ram:19,disk:12},
+ {id:'xc',code:'XC',name:'IXcellerate',hosts:['xc.clv2','xc.clv3'],max:51,avg:17,cpu:56,ram:54,disk:52},
+ {id:'xs',code:'XS',name:'IXcellerate South',hosts:['xs.v2.wb-cloud.ru','xs.v3.wb-cloud.ru'],max:44,avg:19,cpu:70,ram:57,disk:47},
+ {id:'nb',code:'NB',name:'Nubes',hosts:['nb.clv2','nb.clv3'],max:64,avg:20,cpu:64,ram:41,disk:38},
+ {id:'dm',code:'DM',name:'DataLine Medvedkovo',hosts:['dm.v2.wb-cloud.ru','dm.v3.wb-cloud.ru'],max:52,avg:20,cpu:71,ram:50,disk:36},
+ {id:'dl',code:'DL',name:'DataLine',hosts:['prod-5.cloud.dataline'],max:23,avg:9,cpu:39,ram:46,disk:29},
+ {id:'do',code:'DO',name:'WB Домодедово',hosts:['do.v2.wb-cloud.ru','do.v3.wb-cloud.ru'],max:11,avg:2,cpu:11,ram:10,disk:12}
+];
+const PLATFORM={max:64,avg:14,cpu:44,ram:48,disk:35};
+const hostEnv=h=>/(^|\.)(v2|clv2)(\.|$)/.test(h)?'stage':'prod';
+
+const SVC_GROUPS=[
+ {id:'compute',name:'Облачные вычисления',desc:'Базовые ресурсы для любых нагрузок.',items:[
+  {n:'Виртуальные машины',d:'Debian 13 и Debian 12. Расширенные лимиты — до 24 vCPU на Intel и 32 на AMD.',m:'Скоро: CentOS Stream 9, Windows Server 2025, Astra 1.8.5, Talos 1.13.3',s:'live',g:'vm'},
+  {n:'Диски',d:'NVMe и SSD. Для больших объёмов есть отдельный тип лимитов — «большие диски».',s:'live',g:'disk'},
+  {n:'Резервное копирование',d:'Ручное и по расписанию. Квоты на копии ВМ и копии сервисов считаются отдельно.',s:'live',g:'backup'}]},
+ {id:'db',name:'Базы данных',desc:'Управляемые кластеры: создание, мониторинг и резервные копии в консоли.',items:[
+  {n:'PostgreSQL',d:'Реляционная база для надёжного хранения структурированных данных и сложных запросов.',m:'Расширения на выбор: postgis, pg_stat_statements, pgcrypto и ещё 40',s:'beta',g:'db'},
+  {n:'ClickHouse',d:'Колоночная аналитическая СУБД для больших объёмов данных и быстрых запросов в реальном времени.',s:'beta',g:'db'},
+  {n:'MongoDB',d:'Документная база для гибких данных и разных типов контента.',m:'От 2 до 70 шардов',s:'beta',g:'db'},
+  {n:'Cassandra',d:'Распределённая NoSQL-база без единой точки отказа — для больших данных.',s:'beta',g:'db'},
+  {n:'Qdrant',d:'Векторная база для семантического поиска, AI-сервисов и работы с embeddings.',s:'beta',g:'db'}]},
+ {id:'storage',name:'Хранилища и кеш',desc:'Быстрые данные в памяти и объектное хранилище.',items:[
+  {n:'Redis',d:'Хранилище в памяти для кеша, очередей и быстрых операций с данными.',m:'Нечётное число шардов: от 3 до 1023',s:'beta',g:'cache'},
+  {n:'S3 RWB OS',d:'Объектное хранилище, совместимое с S3.',s:'soon',g:'s3'}]},
+ {id:'stream',name:'Потоки и оркестрация',desc:'Обмен данными между сервисами и координация.',items:[
+  {n:'Kafka',d:'Передача и обработка потоков данных между сервисами в реальном времени.',s:'beta',g:'stream'},
+  {n:'ETCD',d:'Распределённое key-value хранилище для конфигураций, состояния кластера и координации сервисов.',s:'beta',g:'kv'},
+  {n:'Kubernetes',d:'Управление контейнерами, масштабирование сервисов и автоматизация деплоя.',s:'soon',g:'k8s'}]},
+ {id:'net',name:'Сетевые конфигурации',desc:'Сети, адреса и DNS внутри контура WB.',items:[
+  {n:'Сети и подсети',d:'Создание сетей и выделение IP-адресов внутри контура WB.',s:'live',g:'net'},
+  {n:'DNSaaS',d:'Создание и управление DNS-зонами и записями. Доступно по API.',s:'live',g:'dns'}]}
+];
+const STATUS={live:['tag--live','доступно'],beta:['tag--beta','beta'],soon:['tag--soon','скоро']};
+
+const ROAD=[
+ {q:'Q4',label:'2026',items:[
+  {n:'S3aaS',d:'Объектное хранилище S3 RWB OS как сервис.'},
+  {n:'FWaaS',d:'Межсетевой экран как сервис.'},
+  {n:'Kubernetes',d:'Управляемые кластеры для контейнерных нагрузок.'},
+  {n:'Сетевые диски',d:'Сетевые блочные диски для ВМ.'}]},
+ {q:'Q4–Q1',label:'2026–2027',items:[
+  {n:'Флейворы при заказе',d:'Готовые конфигурации при создании ВМ и кластеров.'},
+  {n:'Редизайн',d:'Обновлённый веб-интерфейс консоли.'},
+  {n:'Миграция PGaaS',d:'Перенос старых кластеров PostgreSQL с beta-технологии.'}]}
+];
+
+const NEWS=[
+ {d:'19.10.2026',t:'Релизы за две недели',tags:['Сервисы','API','Интерфейс'],b:[
+  'В Prod отображаются кластеры управляемых сервисов из Global Inventory. Создавать новые кластеры и мигрировать существующие в Prod пока нельзя.',
+  'Новые значения по умолчанию для MongoDB: 2 ядра CPU, 8 ГБ RAM, диск 100 ГБ.',
+  'Расширения PostgreSQL стали необязательными.',
+  'Поле <code>limit</code> в API принимает значения от 1 до 1 000 — раньше до 1 000 000.',
+  'Новые методы: <code>User/UserProfileRolesByNamespace</code> и <code>VM/CalculateNSLabels</code>.',
+  'Сортировка по умолчанию: ВМ и сети — по названию, диски и копии — по ВМ, история операций — по дате.',
+  'Ctrl+Alt+Delete в терминале доступна для всех ВМ в статусе RUNNING.',
+  '«Сервисы CMDB» переименованы в «Системы CMDB». Новые системы создаются в Atlas.']},
+ {d:'07.10.2026',t:'ClickHouse и Cassandra в Stage',tags:['Сервисы'],b:[
+  'В Stage можно создавать и удалять кластеры ClickHouse и Apache Cassandra.',
+  'Кластеры, созданные через заявки DevOps, тоже отображаются в WB Cloud.',
+  'Управляемые сервисы доступны в проектах, связанных с Global Inventory.']},
+ {d:'02.10.2026',t:'Резервные копии для управляемых сервисов',tags:['Сервисы','API'],b:[
+  'Резервное копирование для PostgreSQL, ETCD, Qdrant и MongoDB. Квота на копии сервисов по умолчанию — 1 024 ГБ, отдельно от копий ВМ.',
+  'Для PostgreSQL можно выбрать расширения: postgis, pg_stat_statements, pgcrypto и ещё 40.',
+  'Шарды: MongoDB — от 2 до 70, Redis — нечётные значения от 3 до 1023.',
+  'Опубликовано API для управляемых сервисов. Логин может быть длиной до 80 символов.']},
+ {d:'17.09.2026',t:'Новая зона доступности в Stage — WB Домодедово',tags:['Зоны'],b:[
+  '<code>do.v2.wb-cloud.ru</code>: процессоры Intel, диски NVMe.',
+  'Открытые зоны в Stage: do.v2, du1.v2, el1.v2, xs.v2.',
+  'Открытые зоны в Prod: el1.v3, xc.clv3, xs.v3.']},
+ {d:'15.09.2026',t:'Лимиты «большие диски» и английский интерфейс',tags:['Лимиты','API','Интерфейс'],b:[
+  'Новый тип расширенных лимитов — «большие диски». Запрос через заявку «Cloud / Расширение лимитов на ресурсы ВМ».',
+  'Лимиты зависят от зоны: при расширенных лимитах до 24 vCPU в зонах с Intel и до 32 — с AMD.',
+  'История операций показывает действия с управляемыми сервисами.',
+  'Веб-интерфейс можно переключить на английский. Опубликовано API для DNSaaS.']},
+ {d:'24.08.2026',t:'Обязательная связь с CMDB',tags:['CMDB'],b:[
+  'Связь ВМ и проектов с CMDB стала обязательной — проверяется и в интерфейсе, и по API.',
+  'При добавлении пользователя в проект платформа проверяет, есть ли логин в Teleport.',
+  'Параллельные операции над ВМ запрещены — исправлена ошибка удаления в статусе CREATING.']},
+ {d:'17.08.2026',t:'Ограничения для ВМ без связи с CMDB',tags:['CMDB'],b:[
+  'С 24.08 для таких проектов недоступно увеличение квот и расширение лимитов.',
+  'С 07.09 недоступно создание новых ВМ.',
+  'Зачем: чтобы компания видела, на что уходят облачные ресурсы.']},
+ {d:'07.08.2026',t:'Уведомления в Band и Terraform',tags:['Интерфейс','Сервисы'],b:[
+  'Уведомления приходят не только в веб-интерфейс, но и в Band — можно выбрать типы событий.',
+  'Управляемые сервисы создаются через Terraform-провайдер.',
+  'На вкладке «Мониторинг» кластера — данные из Grafana за сегодня, 3 или 30 дней.']}
+];
+
+/* ---------- ISO ENGINE (pseudo-3D in SVG) ---------- */
+const NS='http://www.w3.org/2000/svg';
+const COS=Math.cos(Math.PI/6);
+function mkIso(U){
+  const P=(x,y,z)=>[(x-y)*COS*U,(x+y)*.5*U-z*U];
+  const pt=(x,y,z)=>{const p=P(x,y,z);return p[0].toFixed(1)+','+p[1].toFixed(1)};
+  const bounds={x0:1e9,y0:1e9,x1:-1e9,y1:-1e9};
+  const track=(x,y,z)=>{const p=P(x,y,z);bounds.x0=Math.min(bounds.x0,p[0]);bounds.x1=Math.max(bounds.x1,p[0]);bounds.y0=Math.min(bounds.y0,p[1]);bounds.y1=Math.max(bounds.y1,p[1]);};
+  function box(x,y,z,w,d,h,cls){
+    [[x,y,z+h],[x+w,y,z],[x,y+d,z],[x+w,y+d,z],[x+w,y,z+h],[x,y+d,z+h]].forEach(a=>track(...a));
+    const top=[pt(x,y,z+h),pt(x+w,y,z+h),pt(x+w,y+d,z+h),pt(x,y+d,z+h)].join(' ');
+    const left=[pt(x,y+d,z),pt(x+w,y+d,z),pt(x+w,y+d,z+h),pt(x,y+d,z+h)].join(' ');
+    const right=[pt(x+w,y,z),pt(x+w,y+d,z),pt(x+w,y+d,z+h),pt(x+w,y,z+h)].join(' ');
+    return `<g class="${cls||''}"><polygon class="f-left" points="${left}"/><polygon class="f-right" points="${right}"/><polygon class="f-top" points="${top}"/></g>`;
+  }
+  const line=(a,b,cls)=>{const p=P(...a),q=P(...b);return `<line class="${cls}" x1="${p[0].toFixed(1)}" y1="${p[1].toFixed(1)}" x2="${q[0].toFixed(1)}" y2="${q[1].toFixed(1)}"/>`};
+  const path=pts=>'M'+pts.map(a=>{const p=P(...a);return p[0].toFixed(1)+' '+p[1].toFixed(1)}).join(' L');
+  const vb=(pad)=>{pad=pad||12;return `${(bounds.x0-pad).toFixed(0)} ${(bounds.y0-pad).toFixed(0)} ${(bounds.x1-bounds.x0+pad*2).toFixed(0)} ${(bounds.y1-bounds.y0+pad*2).toFixed(0)}`};
+  return {P,pt,box,line,path,vb,track,bounds};
+}
+
+/* Hero scene: data-driven isometric grid. Layout is computed from ZONES.length,
+   so adding a data center only means adding a row to ZONES. */
+const plural=(n,one,few,many)=>{const m10=n%10,m100=n%100;return m10===1&&m100!==11?one:(m10>=2&&m10<=4&&(m100<12||m100>14))?few:many;};
+function heroScene(){
+  // Skyline: one extruded column per zone in a single row (oblique pseudo-3D).
+  // Column width is derived from ZONES.length, so new data centers just narrow the columns.
+  const N=ZONES.length, VW=640, VH=320, FLOOR=262, PADL=8, PADR=28, HMAX=196;
+  const slot=(VW-PADL-PADR)/N;
+  const bw=Math.min(54,slot*.58), dx=Math.min(20,slot*.24), dy=dx*.62;
+  const f=n=>n.toFixed(1);
+  let out='';
+  // floor
+  const fx0=PADL-6, fx1=VW-PADR+6, fd=dx*1.6;
+  out+=`<g class="plat"><polygon class="f-top" points="${f(fx0)},${f(FLOOR+6)} ${f(fx1)},${f(FLOOR+6)} ${f(fx1+fd)},${f(FLOOR+6-fd*.62)} ${f(fx0+fd)},${f(FLOOR+6-fd*.62)}"/><polygon class="f-left" points="${f(fx0)},${f(FLOOR+6)} ${f(fx1)},${f(FLOOR+6)} ${f(fx1)},${f(FLOOR+13)} ${f(fx0)},${f(FLOOR+13)}"/><polygon class="f-right" points="${f(fx1)},${f(FLOOR+6)} ${f(fx1+fd)},${f(FLOOR+6-fd*.62)} ${f(fx1+fd)},${f(FLOOR+13-fd*.62)} ${f(fx1)},${f(FLOOR+13)}"/></g>`;
+  for(let i=0;i<=N;i++){const x=PADL+i*slot-(slot-bw-dx)/2+ (slot-bw-dx)/2 - 0;out+=`<line class="gridline" x1="${f(x)}" y1="${f(FLOOR+6)}" x2="${f(x+fd)}" y2="${f(FLOOR+6-fd*.62)}"/>`;}
+  // network bus along the floor
+  const busY=FLOOR+6-fd*.31, bx0=PADL, bx1=PADL+(N-1)*slot+(slot-dx)/2+dx/2;
+  out+=`<path class="wire" id="wire0" d="M${f(fx0)} ${f(busY)} L${f(bx1+bw/2)} ${f(busY)}"/>`;
+  if(!reduce){for(let k=0;k<3;k++)out+=`<circle class="packet" r="2.2"><animateMotion dur="${(3+k*.7).toFixed(1)}s" begin="-${(k*1.1+.5).toFixed(1)}s" repeatCount="indefinite"><mpath href="#wire0"/></animateMotion></circle>`;}
+  const pinned=new Set(N<=10?ZONES.map(z=>z.id):[...ZONES].sort((a,b)=>b.max-a.max).slice(0,3).map(z=>z.id));
+  const showCodes=slot>=24;
+  let labels='';
+  ZONES.forEach((z,i)=>{
+    const x=PADL+i*slot+(slot-bw-dx)/2, h=14+z.max/100*HMAX, ah=Math.max(3,z.avg/100*HMAX), top=FLOOR-h;
+    let g='';
+    g+=`<polygon class="f-right" points="${f(x+bw)},${f(FLOOR)} ${f(x+bw+dx)},${f(FLOOR-dy)} ${f(x+bw+dx)},${f(top-dy)} ${f(x+bw)},${f(top)}"/>`;
+    g+=`<polygon class="f-left" points="${f(x)},${f(FLOOR)} ${f(x+bw)},${f(FLOOR)} ${f(x+bw)},${f(top)} ${f(x)},${f(top)}"/>`;
+    g+=`<rect class="avgfill" x="${f(x)}" y="${f(FLOOR-ah)}" width="${f(bw)}" height="${f(ah)}"/>`;
+    g+=`<polygon class="f-top" points="${f(x)},${f(top)} ${f(x+bw)},${f(top)} ${f(x+bw+dx)},${f(top-dy)} ${f(x+dx)},${f(top-dy)}"/>`;
+    for(let y=FLOOR-9;y>top+4;y-=9)g+=`<line class="rack" x1="${f(x+2)}" y1="${f(y)}" x2="${f(x+bw-2)}" y2="${f(y)}"/>`;
+    for(let k=0,y=FLOOR-4.5;y>top+4;k++,y-=9){if((k*7+i*3)%3===0)g+=`<rect class="led" x="${f(x+bw*.16)}" y="${f(y-.7)}" width="2.4" height="1.4"/>`;if((k*5+i)%4===1)g+=`<rect class="led" x="${f(x+bw*.72)}" y="${f(y-.7)}" width="2.4" height="1.4"/>`;}
+    const cx=x+bw/2+dx/2, cy=top-dy/2, capCls='lvl-'+lvl(z.max);
+    g+=`<ellipse class="${capCls}" cx="${f(cx)}" cy="${f(cy)}" rx="${f(Math.min(4,bw*.12))}" ry="${f(Math.min(2.4,bw*.07))}"/>`;
+    if(showCodes)g+=`<text class="code" x="${f(x+bw/2+dx/2)}" y="${f(FLOOR+32)}" text-anchor="middle">${z.code}</text>`;
+    out+=`<g class="tower" tabindex="0" role="button" data-zone="${z.id}" aria-label="${esc(z.name)}: пик ${z.max}%, в среднем ${z.avg}%">${g}</g>`;
+    const fs=Math.max(11,Math.min(24,slot*.32)), ly=top-dy-9;
+    labels+=`<g class="tlabel ${(slot>=22||pinned.has(z.id))?'pin':''}" data-zone="${z.id}" pointer-events="none"><text class="val" x="${f(cx)}" y="${f(ly)}" text-anchor="middle" font-size="${f(fs)}">${z.max}<tspan font-size="${f(fs*.58)}" dx="1">%</tspan></text></g>`;
+  });
+  $('#heroScene').innerHTML=`<svg class="iso-svg" viewBox="0 -6 ${VW+12} ${VH}" role="img" aria-hidden="true">${out}${labels}</svg>`;
+  $('#statZones').textContent=N;
+  $('#statZonesK').textContent=plural(N,'зона доступности','зоны доступности','зон доступности');
+}
+
+/* Hero card */
+function meters(rows){
+  return rows.map(([k,v,cls])=>`<div class="meter"><span class="meter__name">${k}</span><span class="meter__val tnum">${v}%</span><span class="meter__bar"><i class="${cls||''}" style="width:${v}%"></i></span></div>`).join('');
+}
+function cardPlatform(){
+  $('#hcTitle').textContent='Платформа целиком';
+  $('#hcSub').textContent='Все окружения · '+ZONES.length+' '+plural(ZONES.length,'зона','зоны','зон')+' · загрузка гипервизоров';
+  $('#hcMeters').innerHTML=meters([['Пик',PLATFORM.max,'lvl-'+lvl(PLATFORM.max)],['Среднее',PLATFORM.avg],['CPU',PLATFORM.cpu],['RAM',PLATFORM.ram],['Диски',PLATFORM.disk]]);
+}
+function cardZone(z){
+  $('#hcTitle').textContent=z.name;
+  $('#hcSub').textContent=z.hosts.length+(z.hosts.length===1?' хост':' хоста')+' · '+z.hosts[0];
+  $('#hcMeters').innerHTML=meters([['Пик',z.max,'lvl-'+lvl(z.max)],['Среднее',z.avg],['CPU',z.cpu],['RAM',z.ram],['Диски',z.disk]]);
+}
+function bindTowers(){
+  const towers=$$('.tower');
+  const labels=$$('.tlabel');
+  const on=(t)=>{towers.forEach(x=>x.classList.toggle('is-on',x===t));labels.forEach(l=>l.classList.toggle('is-on',l.dataset.zone===t.dataset.zone));cardZone(ZONES.find(z=>z.id===t.dataset.zone));};
+  towers.forEach(t=>{
+    t.addEventListener('mouseenter',()=>on(t));
+    t.addEventListener('focus',()=>on(t));
+    t.addEventListener('click',()=>on(t));
+    t.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();on(t);}});
+  });
+  $('#heroScene').addEventListener('mouseleave',()=>{towers.forEach(x=>x.classList.remove('is-on'));labels.forEach(l=>l.classList.remove('is-on'));cardPlatform();});
+}
+
+/* ---------- ZONES GRID ---------- */
+let envF='all',sortF='free';
+function renderZones(){
+  let list=ZONES.map(z=>({...z,vis:envF==='all'?z.hosts:z.hosts.filter(h=>hostEnv(h)===envF)})).filter(z=>z.vis.length);
+  list.sort(sortF==='name'?(a,b)=>a.name.localeCompare(b.name,'ru'):(a,b)=>a.max-b.max);
+  const html=list.map(z=>{const L=lvl(z.max);return `<article class="zone">
+    <div class="zone__head"><div><div class="zone__name">${esc(z.name)}</div><div class="zone__code mono">${z.code} · ${z.vis.length} ${z.vis.length===1?'хост':'хоста'}</div></div><span class="dot bg-${L}" title="Уровень загрузки"></span></div>
+    <div><div class="zone__big"><b class="tnum">${z.max}%</b><span class="mono">пик</span></div></div>
+    <div><div class="loadbar lvl-c-${L}"><span class="mx" style="width:${z.max}%"></span><span class="av" style="width:${z.avg}%"></span></div>
+    <div class="loadbar-legend mono" style="margin-top:6px"><span>avg ${z.avg}%</span><span>max ${z.max}%</span></div></div>
+    <div class="minis">${[['CPU',z.cpu],['RAM',z.ram],['Диски',z.disk]].map(([k,v])=>`<div><div class="mini__k mono">${k}</div><div class="mini__v tnum">${v}%</div><div class="mini__bar"><i style="width:${v}%"></i></div></div>`).join('')}</div>
+    <div class="hosts">${z.vis.map(h=>`<span class="tag">${esc(h)}</span>`).join('')}</div>
+  </article>`}).join('');
+  const g=$('#zonesGrid');g.innerHTML=html;
+  // close grid edges: remove right border on last col & bottom border on last row handled via overflow + negative margin
+  $$('.zone',g).forEach(el=>{el.style.marginRight='-1px';el.style.marginBottom='-1px';});
+}
+function seg(root,attr,cb){
+  $$('button',root).forEach(b=>b.addEventListener('click',()=>{
+    $$('button',root).forEach(x=>x.setAttribute('aria-pressed',String(x===b)));cb(b.dataset[attr]);
+  }));
+}
+
+/* ---------- SERVICES ---------- */
+function glyph(kind){
+  const I=mkIso(9);let o='';
+  const A=(x,y,z,w,d,h,c)=>{o+=I.box(x,y,z,w,d,h,c);};
+  switch(kind){
+    case 'vm':A(0,0,0,2,2,2,'acc');break;
+    case 'disk':A(0,0,0,2.2,2.2,.45,'');A(0,0,.6,2.2,2.2,.45,'');A(0,0,1.2,2.2,2.2,.45,'acc');break;
+    case 'backup':A(.9,0,0,1.5,1.5,1.5,'');A(0,.9,0,1.5,1.5,1.5,'acc');break;
+    case 'db':A(0,0,0,2,2,.6,'acc');A(0,0,.75,2,2,.6,'acc');A(0,0,1.5,2,2,.6,'acc');break;
+    case 'cache':A(0,0,0,2.4,2.4,.35,'');A(.6,.6,.35,1.2,1.2,1.4,'pink');break;
+    case 's3':A(0,0,0,1,1,1,'');A(1.2,0,0,1,1,1,'');A(0,1.2,0,1,1,1,'');A(1.2,1.2,0,1,1,1,'');break;
+    case 'stream':A(0,0,0,.8,2.6,.8,'acc');A(1.1,0,0,.8,2.6,.8,'');break;
+    case 'kv':A(0,0,0,1,1,1.8,'acc');A(1.3,0,0,1,1,1.2,'');A(0,1.3,0,1,1,.8,'');break;
+    case 'k8s':A(0,0,0,.9,.9,.9,'');A(1.1,0,0,.9,.9,.9,'');A(0,1.1,0,.9,.9,.9,'');A(1.1,1.1,0,.9,.9,.9,'');A(.55,.55,.9,.9,.9,.9,'');break;
+    case 'net':A(0,0,0,2.6,2.6,.25,'');A(.2,.2,.25,.7,.7,.7,'acc');A(1.7,1.7,.25,.7,.7,.7,'acc');A(1.7,.2,.25,.7,.7,.7,'');break;
+    case 'dns':A(0,0,0,2.2,2.2,.3,'');A(.7,.7,.3,.8,.8,1.6,'acc');break;
+  }
+  return `<svg class="iso-svg svc__ico" viewBox="${I.vb(2)}" aria-hidden="true">${o}</svg>`;
+}
+let svcF='all';
+function renderSvcFilters(){
+  const all=SVC_GROUPS.reduce((n,g)=>n+g.items.length,0);
+  const opts=[['all','Все',all],...SVC_GROUPS.map(g=>[g.id,g.name,g.items.length])];
+  $('#svcFilters').innerHTML=opts.map(([id,n,c])=>`<button class="chip" aria-pressed="${id===svcF}" data-f="${id}">${n}<small>${c}</small></button>`).join('');
+  $$('#svcFilters .chip').forEach(b=>b.addEventListener('click',()=>{svcF=b.dataset.f;renderSvcFilters();renderSvc();}));
+}
+function renderSvc(){
+  $('#svcGroups').innerHTML=SVC_GROUPS.filter(g=>svcF==='all'||g.id===svcF).map(g=>`<div class="svc-group">
+    <div class="svc-group__aside"><div class="svc-group__name">${g.name}</div><p>${g.desc}</p></div>
+    <div class="svc-cards">${g.items.map(s=>`<article class="svc ${s.s==='soon'?'is-soon':''}">
+      <div class="svc__top">${glyph(s.g)}<span class="tag ${STATUS[s.s][0]}">${STATUS[s.s][1]}</span></div>
+      <div class="svc__name">${esc(s.n)}</div>
+      <p class="svc__desc">${esc(s.d)}</p>
+      ${s.m?`<div class="svc__meta">${esc(s.m)}</div>`:''}
+    </article>`).join('')}</div></div>`).join('');
+}
+
+/* ---------- ROADMAP ---------- */
+function renderRoad(){
+  $('#road').innerHTML=ROAD.map(l=>`<div class="lane">
+    <div class="lane__head"><span class="lane__q">${l.q}</span><span class="tag">${l.label}</span><span class="tag tag--soon">${l.items.length} ${l.items.length>4?'задач':'задачи'}</span></div>
+    <div class="track">${l.items.map(i=>`<div class="ms"><div class="ms__name">${esc(i.n)}</div><p class="ms__desc">${esc(i.d)}</p></div>`).join('')}</div>
+  </div>`).join('');
+}
+
+/* ---------- NEWS ---------- */
+let newsShown=4;
+function renderNews(){
+  $('#newsList').innerHTML=NEWS.slice(0,newsShown).map((n,i)=>`<article class="post">
+    <button class="post__btn" aria-expanded="${i===0}" aria-controls="post${i}">
+      <span class="post__date mono tnum">${n.d}</span>
+      <span class="post__title">${esc(n.t)}</span>
+      <span class="post__tags">${n.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</span>
+      <span class="post__arr" aria-hidden="true">+</span>
+    </button>
+    <div class="post__body" id="post${i}" ${i===0?'':'hidden'}><ul>${n.b.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+  </article>`).join('');
+  $$('.post__btn').forEach(b=>b.addEventListener('click',()=>{
+    const open=b.getAttribute('aria-expanded')==='true';b.setAttribute('aria-expanded',String(!open));
+    document.getElementById(b.getAttribute('aria-controls')).hidden=open;
+  }));
+  const more=$('#newsMore');
+  if(newsShown>=NEWS.length){more.textContent='Свернуть';}else{more.textContent=`Показать ещё ${NEWS.length-newsShown}`;}
+}
+$('#newsMore').addEventListener('click',()=>{newsShown=newsShown>=NEWS.length?4:NEWS.length;renderNews();if(newsShown===4)$('#news').scrollIntoView();});
+
+/* ---------- CALCULATOR ---------- */
+const OPEN_ZONES={
+  stage:[['do','do.v2.wb-cloud.ru','intel'],['du','du1.v2.wb-cloud.ru','amd'],['el','el1.v2.wb-cloud.ru','amd'],['xs','xs.v2.wb-cloud.ru','amd']],
+  prod:[['el','el1.v3.wb-cloud.ru','amd'],['xc','xc.clv3','intel'],['xs','xs.v3.wb-cloud.ru','amd']]
+};
+const FLAVORS=[['S',2,4],['M',4,16],['L',8,32],['XL',16,64],['Свой',null,null]];
+const SVC_SPEC={
+  postgresql:{n:'PostgreSQL',cpu:2,ram:8,disk:100,min:1,max:9,step:1,def:3},
+  clickhouse:{n:'ClickHouse',cpu:8,ram:32,disk:500,min:1,max:12,step:1,def:2},
+  mongodb:{n:'MongoDB',cpu:2,ram:8,disk:100,min:2,max:70,step:1,def:2},
+  cassandra:{n:'Cassandra',cpu:4,ram:16,disk:300,min:3,max:24,step:1,def:3},
+  qdrant:{n:'Qdrant',cpu:4,ram:16,disk:100,min:1,max:9,step:1,def:1},
+  redis:{n:'Redis',cpu:2,ram:8,disk:20,min:3,max:1023,step:2,def:3},
+  kafka:{n:'Kafka',cpu:4,ram:16,disk:200,min:3,max:15,step:1,def:3},
+  etcd:{n:'ETCD',cpu:2,ram:4,disk:20,min:3,max:7,step:2,def:3}
+};
+// Demo prices, ₽ per month
+const PRICE={cpu:420,ram:150,nvme:8,ssd:5,backup:2.5,svcMul:1.25,stageMul:.5,rentMul:3};
+const QUOTA={cpu:64,ram:256,disk:4096,backup:1024};
+const BASE_LIMIT={cpu:16,ram:64,disk:1024};
+const DEFAULT={env:'stage',zone:'el',flavor:'M',cpu:4,ram:16,count:4,os:'debian13',diskType:'nvme',disk:100,backup:true,freq:'daily',copies:7,svcs:[{k:'postgresql',nodes:3}]};
+let S=JSON.parse(JSON.stringify(DEFAULT));
+
+const zoneInfo=()=>OPEN_ZONES[S.env].find(z=>z[0]===S.zone)||OPEN_ZONES[S.env][0];
+const maxCpu=()=>zoneInfo()[2]==='intel'?24:32;
+
+function setRange(el,v){el.value=v;const p=(v-el.min)/(el.max-el.min)*100;el.style.setProperty('--p',p+'%');}
+function initCalcUI(){
+  $('#cFlavors').innerHTML=FLAVORS.map(([n,c,r])=>`<button type="button" class="flavor" data-f="${n}" aria-pressed="false"><b>${n}</b><span>${c?`${c} vCPU · ${r} ГБ`:'вручную'}</span></button>`).join('');
+  $$('#cFlavors .flavor').forEach(b=>b.addEventListener('click',()=>{
+    const f=FLAVORS.find(x=>x[0]===b.dataset.f);S.flavor=f[0];if(f[1]){S.cpu=Math.min(f[1],maxCpu());S.ram=f[2];}calc();
+  }));
+  $('#cSvcAdd').innerHTML=Object.entries(SVC_SPEC).map(([k,s])=>`<option value="${k}">${s.n}</option>`).join('');
+  $('#cSvcAddBtn').addEventListener('click',()=>{
+    const k=$('#cSvcAdd').value;const ex=S.svcs.find(s=>s.k===k);
+    if(ex){ex.nodes=Math.min(SVC_SPEC[k].max,ex.nodes+SVC_SPEC[k].step);}else{S.svcs.push({k,nodes:SVC_SPEC[k].def});}
+    calc();
+  });
+  seg($('#cEnv'),'v',v=>{S.env=v;if(!OPEN_ZONES[v].some(z=>z[0]===S.zone))S.zone=OPEN_ZONES[v][0][0];calc();});
+  seg($('#cDiskType'),'v',v=>{S.diskType=v;calc();});
+  seg($('#cFreq'),'v',v=>{S.freq=v;calc();});
+  $('#cZone').addEventListener('change',e=>{S.zone=e.target.value;calc();});
+  $('#cOs').addEventListener('change',e=>{S.os=e.target.value;calc();});
+  $('#cCpu').addEventListener('input',e=>{S.cpu=+e.target.value;S.flavor=matchFlavor();calc();});
+  $('#cRam').addEventListener('input',e=>{S.ram=+e.target.value;S.flavor=matchFlavor();calc();});
+  $('#cCount').addEventListener('input',e=>{S.count=+e.target.value;calc();});
+  $('#cDisk').addEventListener('input',e=>{S.disk=+e.target.value;calc();});
+  $('#cCopies').addEventListener('input',e=>{S.copies=+e.target.value;calc();});
+  $('#cBackup').addEventListener('change',e=>{S.backup=e.target.checked;calc();});
+  $('#calcForm').addEventListener('submit',e=>e.preventDefault());
+  $('#rReset').addEventListener('click',()=>{S=JSON.parse(JSON.stringify(DEFAULT));calc();});
+  $('#rCopy').addEventListener('click',copySummary);
+}
+const matchFlavor=()=>{const f=FLAVORS.find(x=>x[1]===S.cpu&&x[2]===S.ram);return f?f[0]:'Свой';};
+
+function totals(){
+  const vm={cpu:S.cpu*S.count,ram:S.ram*S.count,disk:S.disk*S.count};
+  const sv={cpu:0,ram:0,disk:0,nodes:0};
+  S.svcs.forEach(s=>{const p=SVC_SPEC[s.k];sv.cpu+=p.cpu*s.nodes;sv.ram+=p.ram*s.nodes;sv.disk+=p.disk*s.nodes;sv.nodes+=s.nodes;});
+  const backup=S.backup?Math.round(vm.disk*S.copies*(S.freq==='daily'?.15:.3)):0;
+  const envMul=S.env==='stage'?PRICE.stageMul:1;
+  const dP=PRICE[S.diskType];
+  const cost={
+    compute:vm.cpu*PRICE.cpu*envMul,
+    ram:vm.ram*PRICE.ram*envMul,
+    disk:vm.disk*dP*envMul,
+    backup:backup*PRICE.backup*envMul,
+    svc:(sv.cpu*PRICE.cpu+sv.ram*PRICE.ram+sv.disk*PRICE.nvme)*PRICE.svcMul*envMul
+  };
+  cost.total=cost.compute+cost.ram+cost.disk+cost.backup+cost.svc;
+  return {vm,sv,backup,cost,all:{cpu:vm.cpu+sv.cpu,ram:vm.ram+sv.ram,disk:vm.disk+sv.disk}};
+}
+
+function calcScene(t){
+  const I=mkIso(14);let o='';
+  const vmN=Math.min(S.count,20),svN=Math.min(t.sv.nodes,12);
+  const total=vmN+svN;const cols=total>12?5:4;const rows=Math.max(1,Math.ceil(total/cols));
+  const W=cols*1.5+.4,D=rows*1.5+.4;
+  o+=I.box(-.2,-.2,0,Math.max(W,6.4),Math.max(D,4.6),.25,'plat');
+  const cells=[];
+  for(let i=0;i<total;i++){const r=Math.floor(i/cols),c=i%cols;cells.push({x:c*1.5+.2,y:r*1.5+.2,svc:i>=vmN});}
+  cells.sort((a,b)=>(a.x+a.y)-(b.x+b.y));
+  const vmH=.35+Math.min(S.cpu,32)/32*2.2;
+  cells.forEach(c=>{
+    if(c.svc){o+=I.box(c.x,c.y,.25,1.1,1.1,.45,'pink');o+=I.box(c.x,c.y,.82,1.1,1.1,.45,'pink');}
+    else{o+=I.box(c.x,c.y,.25,1.1,1.1,vmH,'acc');}
+  });
+  I.track(0,0,3.2);
+  let more='';
+  const extra=(S.count-vmN)+(t.sv.nodes-svN);
+  if(extra>0){more=`<text class="lbl" x="${(I.bounds.x1-4).toFixed(0)}" y="${(I.bounds.y0+10).toFixed(0)}" text-anchor="end">+${extra} ещё</text>`;}
+  $('#calcScene').innerHTML=`<svg class="iso-svg" viewBox="${I.vb(10)}">${o}${more}</svg>`;
+}
+
+function calc(){
+  // clamp
+  const mc=maxCpu();if(S.cpu>mc)S.cpu=mc;
+  // sync UI
+  $$('#cEnv button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===S.env)));
+  $$('#cDiskType button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===S.diskType)));
+  $$('#cFreq button').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.v===S.freq));b.disabled=!S.backup;});
+  $$('#cFlavors .flavor').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.f===S.flavor)));
+  $('#cZone').innerHTML=OPEN_ZONES[S.env].map(([id,host,pl])=>{const z=ZONES.find(x=>x.id===id);return `<option value="${id}" ${id===S.zone?'selected':''}>${z.name} — ${host}</option>`}).join('');
+  const zi=zoneInfo(),zz=ZONES.find(x=>x.id===zi[0]);
+  $('#cZoneHint').innerHTML=`Процессоры ${zi[2]==='intel'?'Intel':'AMD'} · расширенный лимит до ${mc} vCPU · пиковая загрузка зоны <span class="lvl-c-${lvl(zz.max)}">${zz.max}%</span>`;
+  const cpuEl=$('#cCpu');cpuEl.max=mc;$('#cCpuMax').textContent=mc;setRange(cpuEl,S.cpu);
+  setRange($('#cRam'),S.ram);setRange($('#cCount'),S.count);setRange($('#cDisk'),S.disk);setRange($('#cCopies'),S.copies);
+  $('#cCpuV').innerHTML=`${S.cpu}<small>vCPU</small>`;
+  $('#cRamV').innerHTML=`${S.ram}<small>ГБ</small>`;
+  $('#cCountV').innerHTML=`${S.count}<small>шт.</small>`;
+  $('#cDiskV').innerHTML=S.disk>=1024?`${(S.disk/1024).toFixed(S.disk%1024?1:0).replace('.',',')}<small>ТБ</small>`:`${S.disk}<small>ГБ</small>`;
+  $('#cCopiesV').innerHTML=`${S.copies}<small>${S.copies===1?'копия':S.copies<5?'копии':'копий'}</small>`;
+  $('#cOs').value=S.os;
+  $('#cBackup').checked=S.backup;
+  $('#cCopiesWrap').style.opacity=S.backup?1:.4;$('#cCopies').disabled=!S.backup;
+  // services rows
+  $('#cSvcRows').innerHTML=S.svcs.length?S.svcs.map((s,i)=>{const p=SVC_SPEC[s.k];return `<div class="svc-row">
+      <div><div class="svc-row__name">${p.n}</div><div class="svc-row__spec">${p.cpu} vCPU · ${p.ram} ГБ · ${p.disk} ГБ на ноду</div></div>
+      <div class="stepper" role="group" aria-label="Число нод ${p.n}"><button type="button" data-i="${i}" data-d="-1" aria-label="Меньше нод" ${s.nodes-p.step<p.min?'disabled':''}>−</button><output class="tnum">${s.nodes}</output><button type="button" data-i="${i}" data-d="1" aria-label="Больше нод" ${s.nodes+p.step>p.max?'disabled':''}>+</button></div>
+      <button type="button" class="x-btn" data-x="${i}" aria-label="Убрать ${p.n}">×</button></div>`}).join(''):`<div class="fld__hint">Сервисы не добавлены — посчитаем только ВМ.</div>`;
+  $$('#cSvcRows .stepper button').forEach(b=>b.addEventListener('click',()=>{const s=S.svcs[+b.dataset.i],p=SVC_SPEC[s.k];s.nodes=Math.max(p.min,Math.min(p.max,s.nodes+p.step*(+b.dataset.d)));calc();}));
+  $$('#cSvcRows .x-btn').forEach(b=>b.addEventListener('click',()=>{S.svcs.splice(+b.dataset.x,1);calc();}));
+
+  const t=totals();
+  calcScene(t);
+  $('#rTotals').innerHTML=[
+    [fmt(t.all.cpu),'vCPU'],[fmt(t.all.ram)+' ГБ','RAM'],[t.all.disk>=1024?(t.all.disk/1024).toFixed(1).replace('.',',')+' ТБ':fmt(t.all.disk)+' ГБ','Диски'],[fmt(t.backup)+' ГБ','Бэкапы ВМ']
+  ].map(([v,k])=>`<div><div class="tot__v tnum">${v}</div><div class="tot__k mono">${k}</div></div>`).join('');
+
+  const q=[['vCPU',t.all.cpu,QUOTA.cpu,''],['RAM',t.all.ram,QUOTA.ram,' ГБ'],['Диски',t.all.disk,QUOTA.disk,' ГБ'],['Бэкапы',t.backup,QUOTA.backup,' ГБ']];
+  const over=q.filter(x=>x[1]>x[2]);
+  $('#rQuota').innerHTML=q.map(([k,v,m,u])=>`<div class="q"><span class="q__k">${k}</span><span class="q__bar"><i class="${v>m?'over':''}" style="width:${Math.min(100,v/m*100)}%"></i></span><span class="q__v tnum">${fmt(v)} / ${fmt(m)}${u}</span></div>`).join('');
+  $('#rQuotaStatus').innerHTML=over.length?`<span class="lvl-c-high">Не хватает: ${over.map(x=>x[0]).join(', ')}</span>`:`<span class="lvl-c-ok">Влезает в квоту</span>`;
+
+  const notes=[];
+  if(over.length)notes.push(['crit',`Нужна заявка <b>«Cloud / Изменение квот»</b> — превышено: ${over.map(x=>x[0]).join(', ')}.`]);
+  if(S.cpu>BASE_LIMIT.cpu||S.ram>BASE_LIMIT.ram)notes.push(['warn',`ВМ больше базового лимита (${BASE_LIMIT.cpu} vCPU / ${BASE_LIMIT.ram} ГБ). Нужна заявка <b>«Cloud / Расширение лимитов на ресурсы ВМ»</b>.`]);
+  if(S.disk>BASE_LIMIT.disk)notes.push(['warn',`Диск больше 1 ТБ — запросите расширенный лимит типа <b>«большие диски»</b>.`]);
+  if(S.env==='prod'&&S.svcs.length)notes.push(['warn',`В Prod пока нельзя создавать новые кластеры управляемых сервисов. Разверните их в <b>Stage</b>.`]);
+  notes.push(['info',`Свяжите ВМ и проект с <b>системой CMDB</b> — без связи квоту не увеличат, а новые ВМ не создадутся.`]);
+  if(!over.length&&notes.length===1)notes.unshift(['ok','Конфигурация укладывается в квоту и базовые лимиты — можно создавать.']);
+  $('#rNotes').innerHTML=notes.map(([c,txt])=>`<div class="note note--${c}"><span>${txt}</span></div>`).join('');
+
+  $('#rPrice').textContent=fmt(t.cost.total);
+  $('#rBreak').innerHTML=[['Вычисления',t.cost.compute],['Память',t.cost.ram],[`Диски ${S.diskType==='nvme'?'NVMe':'SSD'}`,t.cost.disk],['Резервные копии',t.cost.backup],['Управляемые сервисы',t.cost.svc]]
+    .filter(x=>x[1]>0).map(([k,v])=>`<div><span>${k}</span><span>${fmt(v)} ₽</span></div>`).join('')+(S.env==='stage'?`<div><span class="mono" style="color:var(--faint)">Stage — коэффициент ×0,5</span><span></span></div>`:'');
+  $('#rCompare').innerHTML='';
+}
+
+function summaryText(){
+  const t=totals(),zi=zoneInfo();
+  const lines=[
+    `WB Cloud — конфигурация (демо-расчёт)`,
+    `Окружение: ${S.env==='prod'?'Prod':'Stage'}, зона: ${zi[1]}`,
+    `ВМ: ${S.count} × ${S.cpu} vCPU / ${S.ram} ГБ RAM / ${S.disk} ГБ ${S.diskType==='nvme'?'NVMe':'SSD'}, образ ${$('#cOs').selectedOptions[0].text}`,
+    `Резервное копирование: ${S.backup?`${S.freq==='daily'?'ежедневно':'еженедельно'}, хранить ${S.copies}`:'нет'}`,
+    `Сервисы: ${S.svcs.length?S.svcs.map(s=>`${SVC_SPEC[s.k].n} × ${s.nodes}`).join(', '):'нет'}`,
+    `Итого: ${t.all.cpu} vCPU, ${t.all.ram} ГБ RAM, ${t.all.disk} ГБ дисков, ${t.backup} ГБ бэкапов`,
+    `Оценка: ${fmt(t.cost.total)} ₽/мес`
+  ];
+  return lines.join('\n');
+}
+function copySummary(){
+  const txt=summaryText();const done=()=>{const c=$('#rCopied');c.hidden=false;clearTimeout(copySummary.t);copySummary.t=setTimeout(()=>c.hidden=true,2000);};
+  try{navigator.clipboard.writeText(txt).then(done,()=>fallback(txt,done));}catch(e){fallback(txt,done);}
+}
+function fallback(txt,done){
+  const ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');done();}catch(e){}
+  ta.remove();
+}
+
+/* help scene: small iso cluster */
+function helpScene(){
+  const I=mkIso(20);let o='';
+  o+=I.box(0,0,0,9,7,.3,'plat');
+  const blocks=[[1,1,2.4,''],[3,1,1.2,''],[5,1,3.2,'acc'],[7,1,1.6,''],[1,3.2,1.4,''],[3,3.2,2,'pink'],[5,3.2,1,''],[7,3.2,2.6,''],[1,5.4,.9,''],[3,5.4,1.8,''],[5,5.4,1.3,'acc'],[7,5.4,.8,'']];
+  blocks.sort((a,b)=>(a[0]+a[1])-(b[0]+b[1])).forEach(([x,y,h,c])=>{o+=I.box(x,y,.3,1.2,1.2,h,c);});
+  $('#helpScene').innerHTML=`<svg class="iso-svg" viewBox="${I.vb(10)}">${o}</svg>`;
+}
+
+/* ---------- header behaviour ---------- */
+const header=$('#header');let lastY=0;
+window.addEventListener('scroll',()=>{const y=window.scrollY;header.classList.toggle('is-hidden',y>lastY&&y>400&&$('#mnav').hidden);lastY=y;},{passive:true});
+const burger=$('#burger'),mnav=$('#mnav');
+burger.addEventListener('click',()=>{const open=mnav.hidden;mnav.hidden=!open;burger.setAttribute('aria-expanded',String(open));});
+$$('#mnav a').forEach(a=>a.addEventListener('click',()=>{mnav.hidden=true;burger.setAttribute('aria-expanded','false');}));
+window.addEventListener('resize',()=>{if(window.innerWidth>1023&&!mnav.hidden){mnav.hidden=true;burger.setAttribute('aria-expanded','false');}});
+if('IntersectionObserver' in window){
+  const links=$$('.nav a');
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.toggle('is-active',l.getAttribute('href')==='#'+e.target.id));}}),{rootMargin:'-45% 0px -50% 0px'});
+  ['zones','services','calc','roadmap','news'].forEach(id=>io.observe(document.getElementById(id)));
+}
+
+/* ---------- boot ---------- */
+heroScene();cardPlatform();bindTowers();
+seg($('#envSeg'),'env',v=>{envF=v;renderZones();});
+seg($('#sortSeg'),'sort',v=>{sortF=v;renderZones();});
+renderZones();
+renderSvcFilters();renderSvc();
+renderRoad();renderNews();
+initCalcUI();calc();
+helpScene();
+})();
+</script>
+
+</body></html>
