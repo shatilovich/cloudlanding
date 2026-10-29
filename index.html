@@ -154,10 +154,8 @@ h1,h2,h3{text-wrap:balance}
 .meter__bar i.lvl-ok{background:var(--ok)} .meter__bar i.lvl-mid{background:var(--mid)} .meter__bar i.lvl-high{background:var(--high)}
 .hc__foot{display:flex;justify-content:space-between;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line);color:var(--accent-2)}
 .hero__hint{color:var(--faint);margin-top:6px}
-.hero__stats{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line)}
-.hero__stats>div{padding:22px 24px 24px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:4px}
-.hero__stats>div:first-child{padding-left:0}
-.hero__stats>div:last-child{border-right:0}
+.hero__stats{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding-bottom:48px}
+.hero__stats>div{padding:22px 24px 24px;border:1px solid rgba(255,255,255,.12);border-radius:16px;background:rgba(23,18,44,.55);display:flex;flex-direction:column;gap:4px;min-width:0}
 .stat__v{font-size:30px;font-weight:500;color:var(--light);letter-spacing:-.01em;line-height:1.15}
 .stat__k{color:var(--muted)}
 
@@ -383,10 +381,7 @@ input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(-
   .hero__text{padding-top:0}
   .hero__stage{padding-top:8px}
   #hcMeters{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 20px}
-  .hero__stats{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .hero__stats>div:nth-child(2){border-right:0}
-  .hero__stats>div:nth-child(3){padding-left:0}
-  .hero__stats>div:nth-child(n+3){border-top:1px solid var(--line)}
+  .hero__stats{grid-template-columns:repeat(2,minmax(0,1fr));padding-bottom:32px}
   .svc-group{grid-template-columns:minmax(0,1fr)}
   .svc-group__aside{border-right:0;border-bottom:1px solid var(--line);padding:24px 0}
   .calc{grid-template-columns:minmax(0,1fr)}
@@ -409,7 +404,8 @@ input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(-
   #hcMeters{grid-template-columns:repeat(2,minmax(0,1fr))}
   .iso-svg .code{display:none}
   .stat__v{font-size:24px}
-  .hero__stats>div{padding:18px 12px 18px 16px}
+  .hero__stats{gap:8px}
+  .hero__stats>div{padding:16px}
   .zones{grid-template-columns:minmax(0,1fr)}
   .mon-bar{flex-direction:column;align-items:flex-start}
   .seg{max-width:100%;overflow-x:auto}
@@ -501,7 +497,7 @@ input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(-
       <div><span class="stat__v tnum">≈56 000</span><span class="stat__k mono">виртуальных машин</span></div>
       <div><span class="stat__v tnum" id="statZones">8</span><span class="stat__k mono" id="statZonesK">зон доступности</span></div>
       <div><span class="stat__v tnum">8</span><span class="stat__k mono">управляемых сервисов</span></div>
-      <div><span class="stat__v tnum">2</span><span class="stat__k mono">окружения: Stage и Prod</span></div>
+      <div><span class="stat__v tnum">2</span><span class="stat__k mono">окружения</span></div>
     </div>
   </div>
 </section>
