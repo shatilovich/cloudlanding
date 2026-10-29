@@ -109,7 +109,7 @@ h1,h2,h3{text-wrap:balance}
 .hero__title{margin:0;font-family:var(--f-display);font-weight:700;text-transform:uppercase;font-size:clamp(44px,5.4vw,80px);line-height:1;letter-spacing:-.02em;color:var(--light)}
 .hero__title em{font-style:normal;color:var(--accent-2)}
 .hero__lead{margin:0;font-size:19px;line-height:29px;max-width:470px}
-.hero__actions{display:flex;flex-wrap:wrap;align-items:center;gap:14px 24px}
+.hero__actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
 .split{display:inline-flex;border-radius:14px;overflow:hidden}
 .split .btn{border-radius:0}
 .split .btn+.btn{border-left:1px solid rgba(255,255,255,.22)}
@@ -473,10 +473,8 @@ input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(-
         <h1 class="hero__title">Облако<br>для сервисов<br><em>RWB</em></h1>
         <p class="hero__lead">Виртуальные машины, управляемые базы данных и сети внутри контура WB. Создавайте ресурсы сами — в веб-интерфейсе, через API или Terraform.</p>
         <div class="hero__actions">
-          <div class="split">
-            <a class="btn" href="https://prod-cloud.tp.rwb.ru/" target="_blank" rel="noopener">Prod<svg class="ico-ext" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M5.29291 18.7071C4.90239 18.3166 4.90239 17.6834 5.29291 17.2929L14.5858 8.00003L8.5 8.00002C7.94771 8.00002 7.5 7.55231 7.5 7.00002C7.5 6.44774 7.94772 6.00002 8.5 6.00002L17 6.00004C17.2652 6.00004 17.5196 6.10539 17.7071 6.29293C17.8946 6.48047 18 6.73482 18 7.00004L18 15.5C18 16.0523 17.5523 16.5 17 16.5C16.4477 16.5 16 16.0523 16 15.5L16 9.41425L6.70712 18.7071C6.3166 19.0976 5.68343 19.0976 5.29291 18.7071Z"/></svg></a>
-            <a class="btn" href="https://cloud.tp.rwb.ru/" target="_blank" rel="noopener">Stage<svg class="ico-ext" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M5.29291 18.7071C4.90239 18.3166 4.90239 17.6834 5.29291 17.2929L14.5858 8.00003L8.5 8.00002C7.94771 8.00002 7.5 7.55231 7.5 7.00002C7.5 6.44774 7.94772 6.00002 8.5 6.00002L17 6.00004C17.2652 6.00004 17.5196 6.10539 17.7071 6.29293C17.8946 6.48047 18 6.73482 18 7.00004L18 15.5C18 16.0523 17.5523 16.5 17 16.5C16.4477 16.5 16 16.0523 16 15.5L16 9.41425L6.70712 18.7071C6.3166 19.0976 5.68343 19.0976 5.29291 18.7071Z"/></svg></a>
-          </div>
+          <a class="btn btn--line" href="https://cloud.tp.rwb.ru/" target="_blank" rel="noopener">Stage<svg class="ico-ext" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M5.29291 18.7071C4.90239 18.3166 4.90239 17.6834 5.29291 17.2929L14.5858 8.00003L8.5 8.00002C7.94771 8.00002 7.5 7.55231 7.5 7.00002C7.5 6.44774 7.94772 6.00002 8.5 6.00002L17 6.00004C17.2652 6.00004 17.5196 6.10539 17.7071 6.29293C17.8946 6.48047 18 6.73482 18 7.00004L18 15.5C18 16.0523 17.5523 16.5 17 16.5C16.4477 16.5 16 16.0523 16 15.5L16 9.41425L6.70712 18.7071C6.3166 19.0976 5.68343 19.0976 5.29291 18.7071Z"/></svg></a>
+          <a class="btn" href="https://prod-cloud.tp.rwb.ru/" target="_blank" rel="noopener">Prod<svg class="ico-ext" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M5.29291 18.7071C4.90239 18.3166 4.90239 17.6834 5.29291 17.2929L14.5858 8.00003L8.5 8.00002C7.94771 8.00002 7.5 7.55231 7.5 7.00002C7.5 6.44774 7.94772 6.00002 8.5 6.00002L17 6.00004C17.2652 6.00004 17.5196 6.10539 17.7071 6.29293C17.8946 6.48047 18 6.73482 18 7.00004L18 15.5C18 16.0523 17.5523 16.5 17 16.5C16.4477 16.5 16 16.0523 16 15.5L16 9.41425L6.70712 18.7071C6.3166 19.0976 5.68343 19.0976 5.29291 18.7071Z"/></svg></a>
         </div>
       </div>
       <div class="hero__stage">
@@ -527,7 +525,7 @@ input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(-
       </div>
     </div>
     <div class="zones" id="zonesGrid"></div>
-    <p class="mon-note mono">Данные на 29.10.2026 · полоса: яркая часть — средняя загрузка, бледная — пиковая</p>
+    
   </div>
 </section>
 
