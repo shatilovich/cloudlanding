@@ -107,7 +107,7 @@ h1,h2,h3{text-wrap:balance}
 .hero__veil.is-live~.hero__glow{display:none}
 .hero>.wrap{position:relative;z-index:1}
 .hero__glow{position:absolute;pointer-events:none;width:960px;height:640px;top:80px;right:-160px;background:radial-gradient(closest-side,rgba(167,58,253,.28),transparent)}
-.hero__grid{position:relative;display:grid;grid-template-columns:minmax(0,480px) minmax(0,1fr);gap:24px 48px;padding-block:56px 64px;align-items:center}
+.hero__grid{position:relative;display:grid;grid-template-columns:minmax(0,480px) minmax(0,1fr);gap:24px 64px;padding-block:112px 128px;align-items:center;min-height:min(max(820px,calc(100svh - var(--header-h))),1000px)}
 .hero__text{position:relative;z-index:2;display:flex;flex-direction:column;gap:28px;align-self:start;padding-top:24px}
 .hero__eyebrow{color:var(--accent-2);display:flex;gap:10px;align-items:center}
 .hero__eyebrow i{width:6px;height:6px;background:var(--accent);display:inline-block}
@@ -146,7 +146,10 @@ h1,h2,h3{text-wrap:balance}
 .tower:hover .f-left,.tower:focus-visible .f-left,.tower.is-on .f-left{fill:#3b2a69}
 .tower:hover .f-right,.tower:focus-visible .f-right,.tower.is-on .f-right{fill:#2c1f52}
 .hero__card{position:relative;z-index:3;margin-top:8px;padding:20px 22px;border:1px solid rgba(255,255,255,.12);border-radius:16px;background:rgba(23,18,44,.86);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
-.hc__top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:4px}
+.hc__top{display:flex;justify-content:space-between;align-items:center;gap:10px 16px;flex-wrap:wrap;margin-bottom:4px}
+.hc__head{display:flex;align-items:center;gap:10px;min-width:0}
+.hero__card .seg button{height:30px;padding:0 12px;font-size:13px}
+.hero__card .rseg__copy{font-size:13px}
 .hc__title{font-size:19px;font-weight:600;color:var(--light);line-height:1.25}
 .hc__sub{color:var(--muted);margin-bottom:14px;min-height:16px}
 #hcMeters{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0 20px}
@@ -370,6 +373,14 @@ input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(-
 .zstat{display:inline-flex;align-items:center;gap:7px;height:24px;padding:0 10px;border-radius:12px;background:rgba(255,255,255,.05);font-family:var(--f-mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;flex:none}
 .zstat i{width:6px;height:6px;border-radius:50%;background:currentColor}
 .zstat--ok{color:var(--ok)} .zstat--mid{color:var(--mid)} .zstat--high{color:var(--high)}
+.tip{position:relative;display:inline-flex}
+.tip__btn{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--accent-2);font:600 14px/1 inherit;font-family:inherit;cursor:pointer;transition:background .2s,border-color .2s}
+.tip__btn:hover,.tip__btn[aria-expanded="true"]{background:rgba(167,58,253,.18);border-color:var(--accent)}
+.tip__body{position:absolute;z-index:20;top:36px;right:0;width:min(340px,calc(100vw - 32px));padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:#17132b;box-shadow:0 12px 32px rgba(0,0,0,.45)}
+.tip__body p{margin:0 0 10px;font-size:13px;line-height:19px;color:var(--body)}
+.tip__body p:last-child{margin:0}
+@media (max-width:1023px){.tip__body{right:auto;left:-16px;width:calc(100vw - 32px)}}
+.tip__body b{color:var(--text,#fff);font-weight:600}
 .howto{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px}
 .howto>div{padding:16px 18px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.02)}
 .howto .mono{color:var(--accent-2)}
@@ -384,10 +395,10 @@ input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(-
 .up-row__name{font-size:17px;font-weight:500;color:var(--light)}
 .up-row__pct{font-size:15px;color:var(--body)}
 .up-row__pct b{color:var(--light);font-weight:600}
-.up-bars{display:flex;gap:2px;height:34px}
-.up-bars i{flex:1 1 0;min-width:0;border-radius:2px;background:var(--ok);opacity:.85;transition:opacity .15s,transform .15s;cursor:default}
+.up-bars{display:flex;gap:2px;height:34px;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.up-bars i{flex:1 1 0;min-width:0;border-radius:2px;background:var(--ok);opacity:.85;transition:opacity .2s;cursor:default;transform:scaleY(.7);will-change:transform}
 .up-bars i.d-mid{background:var(--mid)} .up-bars i.d-high{background:var(--high)}
-.up-bars i:hover{opacity:1;transform:scaleY(1.12)}
+.up-bars i.lit{opacity:1}
 .up-row__foot{display:flex;justify-content:space-between;gap:12px;margin-top:8px;color:var(--faint)}
 .up-row__info{color:var(--body);text-transform:none;letter-spacing:0;font-family:var(--f-body);font-size:13px}
 .up-legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:16px;color:var(--muted)}
@@ -420,7 +431,7 @@ input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(-
   .burger{display:grid}
   .section{padding-block:80px}
   .s-head{grid-template-columns:minmax(0,1fr);margin-bottom:36px}
-  .hero__grid{grid-template-columns:minmax(0,1fr);min-height:0;padding-block:40px 32px;gap:12px}
+  .hero__grid{grid-template-columns:minmax(0,1fr);min-height:0;padding-block:72px 80px;gap:40px}
   .hero__text{padding-top:0}
   .hero__stage{padding-top:8px}
   #hcMeters{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 20px}
@@ -516,7 +527,7 @@ input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(-
   <div class="wrap">
     <div class="hero__grid">
       <div class="hero__text">
-        <h1 class="hero__title">Облако<br>для сервисов<br><em>RWB</em></h1>
+        <h1 class="hero__title">Облако для<br>сервисов<br><em>RWB</em></h1>
         <p class="hero__lead">Виртуальные машины, управляемые базы данных и сети внутри контура WB. Создавайте ресурсы сами — в веб-интерфейсе, через API или Terraform.</p>
         <div class="hero__actions">
           <a class="btn btn--line" href="https://cloud.tp.rwb.ru/" target="_blank" rel="noopener">Stage<svg class="ico-ext" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M5.29291 18.7071C4.90239 18.3166 4.90239 17.6834 5.29291 17.2929L14.5858 8.00003L8.5 8.00002C7.94771 8.00002 7.5 7.55231 7.5 7.00002C7.5 6.44774 7.94772 6.00002 8.5 6.00002L17 6.00004C17.2652 6.00004 17.5196 6.10539 17.7071 6.29293C17.8946 6.48047 18 6.73482 18 7.00004L18 15.5C18 16.0523 17.5523 16.5 17 16.5C16.4477 16.5 16 16.0523 16 15.5L16 9.41425L6.70712 18.7071C6.3166 19.0976 5.68343 19.0976 5.29291 18.7071Z"/></svg></a>
@@ -524,20 +535,16 @@ input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(-
         </div>
       </div>
       <div class="hero__stage">
-        <div class="hero__toolbar">
-          <span class="mono">Загрузка гипервизоров по зонам</span>
-          <div class="seg" role="group" aria-label="Окружение" id="heroEnv">
-            <button aria-pressed="true" data-env="all">Все</button>
-            <button aria-pressed="false" data-env="stage">Stage</button>
-            <button aria-pressed="false" data-env="prod">Prod</button>
-          </div>
-        </div>
         <div id="heroScene" aria-label="Зоны доступности: высота столбца — пиковая загрузка гипервизоров, подсвеченная часть — средняя"></div>
         
         <aside class="hero__card" aria-live="polite">
           <div class="hc__top">
-            <div class="hc__title" id="hcTitle">Платформа целиком</div>
-            <span class="tag tag--live">online</span>
+            <div class="hc__head"><div class="hc__title" id="hcTitle">Платформа целиком</div><span class="tag tag--live">online</span></div>
+            <div class="seg" role="group" aria-label="Окружение" id="heroEnv">
+            <button aria-pressed="true" data-env="all">Все</button>
+            <button aria-pressed="false" data-env="stage">Stage</button>
+            <button aria-pressed="false" data-env="prod">Prod</button>
+          </div>
           </div>
           <div class="hc__sub mono" id="hcSub">Все окружения · 8 зон · загрузка гипервизоров</div>
           <div id="hcMeters"></div>
@@ -565,16 +572,19 @@ input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(-
         <div class="legend mono" aria-hidden="true">
           <span><i class="bg-ok"></i>Свободно · до 40%</span><span><i class="bg-mid"></i>Умеренно · 40–59%</span><span><i class="bg-high"></i>Плотно · от 60%</span>
         </div>
+        <div class="tip" id="loadTip">
+          <button type="button" class="tip__btn" aria-expanded="false" aria-controls="loadTipBody" aria-label="Как читать загрузку">?</button>
+          <div class="tip__body" id="loadTipBody" role="tooltip" hidden>
+            <p><b>Пиковая загрузка</b> — насколько занят самый загруженный гипервизор зоны. Главная цифра: если она высокая, новая ВМ может не поместиться.</p>
+            <p><b>Средняя загрузка</b> — среднее по всем гипервизорам зоны. Показывает, сколько места в зоне в целом.</p>
+            <p><b>Как выбрать зону</b> — берите «Свободно». Если такой нет в нужном окружении, «Умеренно» тоже подойдёт.</p>
+          </div>
+        </div>
         <div class="seg" role="group" aria-label="Сортировка" id="sortSeg">
           <button aria-pressed="true" data-sort="free">Свободнее</button>
           <button aria-pressed="false" data-sort="name">А–Я</button>
         </div>
       </div>
-    </div>
-    <div class="howto">
-      <div><span class="mono">Пиковая загрузка</span><p>Насколько занят самый загруженный гипервизор зоны. Главная цифра: если она высокая, новая ВМ может не поместиться.</p></div>
-      <div><span class="mono">Средняя загрузка</span><p>Среднее по всем гипервизорам зоны. Показывает, сколько места в зоне в целом.</p></div>
-      <div><span class="mono">Как выбрать зону</span><p>Берите зону со статусом «Свободно». Если такой нет в нужном окружении — «Умеренно» тоже подойдёт.</p></div>
     </div>
     <div class="zones" id="zonesGrid"></div>
     
@@ -589,7 +599,6 @@ input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(-
       <h2 class="h-slash">Доступность за 90 дней</h2>
     </div>
     <div class="up" id="upList"></div>
-    <div class="up-legend mono" aria-hidden="true"><span><i class="bg-ok"></i>Без сбоев</span><span><i class="bg-mid"></i>Частичный сбой</span><span><i class="bg-high"></i>Серьёзный сбой</span></div>
   </div>
 </section>
 
@@ -1560,9 +1569,50 @@ function renderUptime(){
   $$('.up-bars').forEach(row=>{
     const info=$('#upInfo'+row.dataset.r);
     const show=i=>{const v=UPTIME_SOURCES[+row.dataset.r].days[i];const down=Math.round((100-v)/100*1440);info.textContent=`${dateOf(i)} · ${pct(v)}${down?` · простой ${down} мин`:' · без сбоев'}`;};
-    row.addEventListener('mouseover',e=>{if(e.target.dataset.i)show(+e.target.dataset.i);});
-    row.addEventListener('mouseleave',()=>info.textContent='');
+    mountWake(row,show,()=>info.textContent='');
   });
+}
+
+/* Wake effect for uptime bars: a port of React Bits WakeSlider (motion springs -> manual rAF springs). */
+function mountWake(row,onIndex,onLeave){
+  const bars=[...row.querySelectorAll('.up-bars i')] ,n=bars.length;
+  if(!n)return;
+  const REST=.7,FULL=12,SENS=1,REACH=5,MIN_REACH=1.5,SKEW=.6,GLIDE=.3,SETTLE=9.23,SMOOTH=100,FLAT=.002;
+  const clamp=(v,lo,hi)=>Math.min(hi,Math.max(lo,v));
+  const sstep=s=>s*s*(3-2*s);
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce)return;
+  let h=0,hv=0,tgt=0,sm=0,smv=0,pres=0,hovering=false,last=0,raf=0,lastX=null,lastT=0;
+  const w0=SETTLE/GLIDE,k=w0*w0,c=2*w0,wv=2000/SMOOTH,kv=wv*wv,cv=2.5*wv;
+  const idxAt=x=>{const r=row.getBoundingClientRect();return clamp((x-r.left)/r.width*(n-1),0,n-1);};
+  const frame=t=>{
+    raf=0;
+    const dt=Math.min((t-(last||t))/1000,1/30);last=t;
+    hv+=(-k*(h-tgt)-c*hv)*dt;h+=hv*dt;
+    smv+=(kv*(hv-sm)-cv*smv)*dt;sm+=smv*dt;
+    pres+=((hovering?1:0)-pres)*Math.min(1,dt*10);
+    const amp=sstep(clamp(Math.abs(sm)*SENS/FULL,0,1))*pres;
+    const dir=Math.sign(sm)||1;
+    const r=MIN_REACH+(REACH-MIN_REACH)*amp;
+    const behind=r*(1+SKEW),ahead=r*(1-.5*SKEW);
+    const li=Math.round(h);
+    for(let i=0;i<n;i++){
+      const d=i-h,R=d*dir<0?behind:ahead;
+      const lift=amp>0&&Math.abs(d)<R?amp*Math.cos(Math.PI*d/(2*R))**2:0;
+      bars[i].style.transform=`scaleY(${(REST+lift*(1-REST)).toFixed(3)})`;
+      bars[i].classList.toggle('lit',i<=li&&hovering);
+    }
+    const settled=!hovering&&pres<FLAT&&Math.abs(smv)<.01&&Math.abs(sm)<.01;
+    if(!settled||hovering)raf=requestAnimationFrame(frame);
+    else for(let i=0;i<n;i++)bars[i].style.transform=`scaleY(${REST})`;
+  };
+  const kick=()=>{if(!raf){last=0;raf=requestAnimationFrame(frame);}};
+  row.addEventListener('pointerenter',e=>{hovering=true;tgt=h=idxAt(e.clientX);lastX=e.clientX;kick();});
+  row.addEventListener('pointermove',e=>{
+    hovering=true;tgt=idxAt(e.clientX);lastX=e.clientX;
+    const i=Math.round(tgt);onIndex(i);kick();
+  });
+  row.addEventListener('pointerleave',()=>{hovering=false;tgt=h;onLeave();kick();});
 }
 
 /* ---------- SERVICES ---------- */
@@ -1899,6 +1949,15 @@ renderRoad();renderNews();
 initCalcUI();calc();
 helpScene();
 $$('.seg').forEach(enhanceSeg);
+})();
+
+(function(){var t=document.getElementById('loadTip');if(!t)return;var b=t.querySelector('.tip__btn'),c=t.querySelector('.tip__body');
+function set(o){b.setAttribute('aria-expanded',o);c.hidden=!o}
+b.addEventListener('click',function(e){e.stopPropagation();set(matchMedia('(hover:hover)').matches?true:c.hidden)});
+t.addEventListener('mouseenter',function(){if(matchMedia('(hover:hover)').matches)set(true)});
+t.addEventListener('mouseleave',function(){if(matchMedia('(hover:hover)').matches)set(false)});
+document.addEventListener('click',function(e){if(!t.contains(e.target))set(false)});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false)});
 })();
 </script>
 
