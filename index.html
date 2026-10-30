@@ -102,7 +102,7 @@ h1,h2,h3{text-wrap:balance}
 /* ===== HERO ===== */
 .hero{position:relative;padding-top:calc(var(--header-h) + env(safe-area-inset-top,0px));border-bottom:1px solid var(--line);overflow:hidden}
 .hero__glow{position:absolute;pointer-events:none;width:960px;height:640px;top:80px;right:-160px;background:radial-gradient(closest-side,rgba(167,58,253,.28),transparent)}
-.hero__grid{position:relative;display:grid;grid-template-columns:minmax(0,480px) minmax(0,1fr);gap:24px 48px;padding-block:56px 48px;align-items:center}
+.hero__grid{position:relative;display:grid;grid-template-columns:minmax(0,480px) minmax(0,1fr);gap:24px 48px;padding-block:56px 64px;align-items:center}
 .hero__text{position:relative;z-index:2;display:flex;flex-direction:column;gap:28px;align-self:start;padding-top:24px}
 .hero__eyebrow{color:var(--accent-2);display:flex;gap:10px;align-items:center}
 .hero__eyebrow i{width:6px;height:6px;background:var(--accent);display:inline-block}
@@ -115,7 +115,7 @@ h1,h2,h3{text-wrap:balance}
 .split .btn+.btn{border-left:1px solid rgba(255,255,255,.22)}
 .hero__stage{position:relative;min-width:0;display:flex;flex-direction:column;justify-content:center}
 #heroScene{padding:0}
-.iso-svg .avgfill{fill:var(--accent);opacity:.32;pointer-events:none}
+.iso-svg .avgfill{fill:var(--accent);opacity:.5;pointer-events:none}
 .iso-svg .code{font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;fill:var(--body)}
 .iso-svg .val{font-family:var(--f-display);font-weight:600;fill:var(--light);letter-spacing:-.02em}
 .iso-svg .val tspan{fill:var(--muted);font-weight:500}
@@ -362,6 +362,35 @@ input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(-
 .footer__bot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:20px;color:var(--faint)}
 .footer__bot a:hover{color:var(--light)}
 
+.zstat{display:inline-flex;align-items:center;gap:7px;height:24px;padding:0 10px;border-radius:12px;background:rgba(255,255,255,.05);font-family:var(--f-mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;flex:none}
+.zstat i{width:6px;height:6px;border-radius:50%;background:currentColor}
+.zstat--ok{color:var(--ok)} .zstat--mid{color:var(--mid)} .zstat--high{color:var(--high)}
+.howto{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px}
+.howto>div{padding:16px 18px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.02)}
+.howto .mono{color:var(--accent-2)}
+.howto p{margin:6px 0 0;font-size:14px;line-height:20px;color:var(--body)}
+.hero__toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+.hero__toolbar .mono{color:var(--muted)}
+/* uptime */
+.up{border:1px solid var(--line);border-radius:16px;padding:8px 24px}
+.up-row{padding:20px 0;border-bottom:1px solid var(--line)}
+.up-row:last-child{border-bottom:0}
+.up-row__head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.up-row__name{font-size:17px;font-weight:500;color:var(--light)}
+.up-row__pct{font-size:15px;color:var(--body)}
+.up-row__pct b{color:var(--light);font-weight:600}
+.up-bars{display:flex;gap:2px;height:34px}
+.up-bars i{flex:1 1 0;min-width:0;border-radius:2px;background:var(--ok);opacity:.85;transition:opacity .15s,transform .15s;cursor:default}
+.up-bars i.d-mid{background:var(--mid)} .up-bars i.d-high{background:var(--high)}
+.up-bars i:hover{opacity:1;transform:scaleY(1.12)}
+.up-row__foot{display:flex;justify-content:space-between;gap:12px;margin-top:8px;color:var(--faint)}
+.up-row__info{color:var(--body);text-transform:none;letter-spacing:0;font-family:var(--f-body);font-size:13px}
+.up-legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:16px;color:var(--muted)}
+.up-legend span{display:inline-flex;gap:8px;align-items:center}
+.up-legend i{width:8px;height:8px;border-radius:2px;display:inline-block}
+@media (max-width:1023px){.howto{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:719px){.up{padding:4px 16px}.up-bars{height:28px}.up-bars i:nth-child(-n+60){display:none}.up-from-90{display:none}}
+@media (min-width:720px){.up-from-30{display:none}}
 /* ===== RESPONSIVE ===== */
 @media (max-width:1240px){
   :root{--pad:48px}
@@ -437,6 +466,7 @@ input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(-
     <a href="#top" class="logo" aria-label="WB Cloud — наверх"><svg viewBox="0 0 184 45" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M0 22.0503C0 9.87224 9.85885 0 22.0204 0H52.6171C64.7786 0 74.6374 9.87224 74.6374 22.0503C74.6374 34.2283 64.7786 44.1005 52.6171 44.1005H22.0204C9.85885 44.1005 0 34.2283 0 22.0503Z" fill="#FF00FF"/><path d="M16.72 33.9922L8.76306 13.0594H14.0954L18.8029 25.1585L23.4687 13.0594H26.6765L31.4256 25.2423L36.1331 13.0594H41.2155L33.2586 33.9922H29.8842L25.0101 21.4325L20.0943 33.9922H16.72Z" fill="#fff"/><path d="M42.6762 22.521V3.94003H47.6753V15.3201C49.6333 13.4361 52.2161 12.4732 54.799 12.4732C59.9231 12.4732 65.0888 16.1574 65.0888 23.5258C65.0888 30.0149 60.3397 34.5783 53.7992 34.5783C47.2587 34.5783 42.6762 30.0149 42.6762 22.521ZM47.6753 23.5258C47.6753 27.0843 50.1748 29.5963 53.7992 29.5963C57.4235 29.5963 59.9231 27.0843 59.9231 23.5258C59.9231 19.9672 57.4235 17.4552 53.7992 17.4552C50.1748 17.4552 47.6753 19.9672 47.6753 23.5258Z" fill="#fff"/><g fill="currentColor"><path d="M181.605 3.72604V34.8039H176.572V32.5361C174.601 34.4259 172.001 35.3919 169.401 35.3919C164.242 35.3919 159.042 31.6961 159.042 24.3046C159.042 16.9131 164.242 13.2174 169.401 13.2174C172.001 13.2174 174.601 14.1833 176.572 16.0732V3.72604H181.605ZM164.242 24.3046C164.242 27.8744 166.758 30.3942 170.407 30.3942C174.056 30.3942 176.572 27.8744 176.572 24.3046C176.572 20.7349 174.056 18.2151 170.407 18.2151C166.758 18.2151 164.242 20.7349 164.242 24.3046Z"/><path d="M156.332 13.8054V34.8039H151.3V32.1581C149.664 34.2999 147.147 35.3499 144.673 35.3499C140.353 35.3499 136.033 32.1161 136.033 25.6905V13.8054H141.066V25.6485C141.066 28.3784 143.163 30.3942 146.183 30.3942C149.203 30.3942 151.3 28.3784 151.3 25.6905V13.8054H156.332Z"/><path d="M115.995 24.3046C115.995 27.8744 118.511 30.3942 122.16 30.3942C125.809 30.3942 128.325 27.8744 128.325 24.3046C128.325 20.7349 125.809 18.215 122.16 18.215C118.511 18.215 115.995 20.7349 115.995 24.3046ZM133.526 24.3046C133.526 30.8142 128.744 35.3919 122.16 35.3919C115.575 35.3919 110.794 30.8142 110.794 24.3046C110.794 17.7951 115.575 13.2174 122.16 13.2174C128.744 13.2174 133.526 17.7951 133.526 24.3046Z"/><path d="M103.027 34.8039V3.72604H108.06V34.8039H103.027Z"/><path d="M91.4779 35.3919C84.8933 35.3919 80.3218 30.8142 80.3218 24.3046C80.3218 17.7951 84.8933 13.2174 91.4779 13.2174C95.5461 13.2174 98.4819 14.8553 100.831 18.383L96.972 21.2808C95.7138 19.349 93.7007 18.215 91.4779 18.215C87.8291 18.215 85.5224 20.7349 85.5224 24.3046C85.5224 27.8744 87.8291 30.3942 91.4779 30.3942C93.7846 30.3942 95.8396 29.1763 96.972 27.2444L100.914 29.9742C98.5238 33.628 95.5041 35.3919 91.4779 35.3919Z"/></g></svg></a>
     <nav class="nav" aria-label="Разделы">
       <a href="#zones">Мониторинг</a>
+      <a href="#uptime">Аптайм</a>
       <a href="#services">Сервисы</a>
       <a href="#calc">Калькулятор</a>
       <a href="#roadmap">Роадмап</a>
@@ -452,6 +482,7 @@ input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(-
 </header>
 <nav class="mnav" id="mnav" hidden aria-label="Меню">
   <a href="#zones">Мониторинг</a>
+      <a href="#uptime">Аптайм</a>
   <a href="#services">Сервисы</a>
   <a href="#calc">Калькулятор</a>
   <a href="#roadmap">Роадмап</a>
@@ -478,6 +509,14 @@ input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(-
         </div>
       </div>
       <div class="hero__stage">
+        <div class="hero__toolbar">
+          <span class="mono">Загрузка гипервизоров по зонам</span>
+          <div class="seg" role="group" aria-label="Окружение" id="heroEnv">
+            <button aria-pressed="true" data-env="all">Все</button>
+            <button aria-pressed="false" data-env="stage">Stage</button>
+            <button aria-pressed="false" data-env="prod">Prod</button>
+          </div>
+        </div>
         <div id="heroScene" aria-label="Зоны доступности: высота столбца — пиковая загрузка гипервизоров, подсвеченная часть — средняя"></div>
         
         <aside class="hero__card" aria-live="polite">
@@ -490,12 +529,6 @@ input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(-
           <div class="hc__foot mono"><span>Канал к ЦОД</span><span>400 Гбит/с</span></div>
         </aside>
       </div>
-    </div>
-    <div class="hero__stats">
-      <div><span class="stat__v tnum">≈56 000</span><span class="stat__k mono">виртуальных машин</span></div>
-      <div><span class="stat__v tnum" id="statZones">8</span><span class="stat__k mono" id="statZonesK">зон доступности</span></div>
-      <div><span class="stat__v tnum">8</span><span class="stat__k mono">управляемых сервисов</span></div>
-      <div><span class="stat__v tnum">2</span><span class="stat__k mono">окружения</span></div>
     </div>
   </div>
 </section>
@@ -516,7 +549,7 @@ input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(-
       </div>
       <div class="row">
         <div class="legend mono" aria-hidden="true">
-          <span><i class="bg-ok"></i>до 40%</span><span><i class="bg-mid"></i>40–59%</span><span><i class="bg-high"></i>от 60%</span>
+          <span><i class="bg-ok"></i>Свободно · до 40%</span><span><i class="bg-mid"></i>Умеренно · 40–59%</span><span><i class="bg-high"></i>Плотно · от 60%</span>
         </div>
         <div class="seg" role="group" aria-label="Сортировка" id="sortSeg">
           <button aria-pressed="true" data-sort="free">Свободнее</button>
@@ -524,8 +557,25 @@ input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(-
         </div>
       </div>
     </div>
+    <div class="howto">
+      <div><span class="mono">Пиковая загрузка</span><p>Насколько занят самый загруженный гипервизор зоны. Главная цифра: если она высокая, новая ВМ может не поместиться.</p></div>
+      <div><span class="mono">Средняя загрузка</span><p>Среднее по всем гипервизорам зоны. Показывает, сколько места в зоне в целом.</p></div>
+      <div><span class="mono">Как выбрать зону</span><p>Берите зону со статусом «Свободно». Если такой нет в нужном окружении — «Умеренно» тоже подойдёт.</p></div>
+    </div>
     <div class="zones" id="zonesGrid"></div>
     
+  </div>
+</section>
+
+<!-- ===== UPTIME ===== -->
+<section class="section" id="uptime">
+  <div class="wrap">
+    <div class="s-label mono"><span class="s-label__name">&gt; Аптайм</span><span class="s-label__rule"></span></div>
+    <div class="s-head">
+      <h2 class="h-slash">Доступность за 90 дней</h2>
+    </div>
+    <div class="up" id="upList"></div>
+    <div class="up-legend mono" aria-hidden="true"><span><i class="bg-ok"></i>Без сбоев</span><span><i class="bg-mid"></i>Частичный сбой</span><span><i class="bg-high"></i>Серьёзный сбой</span></div>
   </div>
 </section>
 
@@ -630,6 +680,7 @@ input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(-
           <div class="slider" id="cCopiesWrap">
             <div class="slider__top"><label class="slider__name" for="cCopies">Хранить копий</label><output class="slider__val tnum" id="cCopiesV" for="cCopies"></output></div>
             <input type="range" id="cCopies" min="1" max="14" step="1">
+            <div class="fld__hint" id="cCopiesHint"></div>
           </div>
         </div>
 
@@ -723,7 +774,7 @@ input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(-
     <div class="footer__top">
       <a href="#top" class="logo" aria-label="WB Cloud — наверх"><svg viewBox="0 0 184 45" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M0 22.0503C0 9.87224 9.85885 0 22.0204 0H52.6171C64.7786 0 74.6374 9.87224 74.6374 22.0503C74.6374 34.2283 64.7786 44.1005 52.6171 44.1005H22.0204C9.85885 44.1005 0 34.2283 0 22.0503Z" fill="#FF00FF"/><path d="M16.72 33.9922L8.76306 13.0594H14.0954L18.8029 25.1585L23.4687 13.0594H26.6765L31.4256 25.2423L36.1331 13.0594H41.2155L33.2586 33.9922H29.8842L25.0101 21.4325L20.0943 33.9922H16.72Z" fill="#fff"/><path d="M42.6762 22.521V3.94003H47.6753V15.3201C49.6333 13.4361 52.2161 12.4732 54.799 12.4732C59.9231 12.4732 65.0888 16.1574 65.0888 23.5258C65.0888 30.0149 60.3397 34.5783 53.7992 34.5783C47.2587 34.5783 42.6762 30.0149 42.6762 22.521ZM47.6753 23.5258C47.6753 27.0843 50.1748 29.5963 53.7992 29.5963C57.4235 29.5963 59.9231 27.0843 59.9231 23.5258C59.9231 19.9672 57.4235 17.4552 53.7992 17.4552C50.1748 17.4552 47.6753 19.9672 47.6753 23.5258Z" fill="#fff"/><g fill="currentColor"><path d="M181.605 3.72604V34.8039H176.572V32.5361C174.601 34.4259 172.001 35.3919 169.401 35.3919C164.242 35.3919 159.042 31.6961 159.042 24.3046C159.042 16.9131 164.242 13.2174 169.401 13.2174C172.001 13.2174 174.601 14.1833 176.572 16.0732V3.72604H181.605ZM164.242 24.3046C164.242 27.8744 166.758 30.3942 170.407 30.3942C174.056 30.3942 176.572 27.8744 176.572 24.3046C176.572 20.7349 174.056 18.2151 170.407 18.2151C166.758 18.2151 164.242 20.7349 164.242 24.3046Z"/><path d="M156.332 13.8054V34.8039H151.3V32.1581C149.664 34.2999 147.147 35.3499 144.673 35.3499C140.353 35.3499 136.033 32.1161 136.033 25.6905V13.8054H141.066V25.6485C141.066 28.3784 143.163 30.3942 146.183 30.3942C149.203 30.3942 151.3 28.3784 151.3 25.6905V13.8054H156.332Z"/><path d="M115.995 24.3046C115.995 27.8744 118.511 30.3942 122.16 30.3942C125.809 30.3942 128.325 27.8744 128.325 24.3046C128.325 20.7349 125.809 18.215 122.16 18.215C118.511 18.215 115.995 20.7349 115.995 24.3046ZM133.526 24.3046C133.526 30.8142 128.744 35.3919 122.16 35.3919C115.575 35.3919 110.794 30.8142 110.794 24.3046C110.794 17.7951 115.575 13.2174 122.16 13.2174C128.744 13.2174 133.526 17.7951 133.526 24.3046Z"/><path d="M103.027 34.8039V3.72604H108.06V34.8039H103.027Z"/><path d="M91.4779 35.3919C84.8933 35.3919 80.3218 30.8142 80.3218 24.3046C80.3218 17.7951 84.8933 13.2174 91.4779 13.2174C95.5461 13.2174 98.4819 14.8553 100.831 18.383L96.972 21.2808C95.7138 19.349 93.7007 18.215 91.4779 18.215C87.8291 18.215 85.5224 20.7349 85.5224 24.3046C85.5224 27.8744 87.8291 30.3942 91.4779 30.3942C93.7846 30.3942 95.8396 29.1763 96.972 27.2444L100.914 29.9742C98.5238 33.628 95.5041 35.3919 91.4779 35.3919Z"/></g></svg></a>
       <nav class="footer__nav" aria-label="Разделы в подвале">
-        <a href="#zones">Мониторинг</a><a href="#services">Сервисы</a><a href="#calc">Калькулятор</a><a href="#roadmap">Роадмап</a><a href="#news">Обновления</a>
+        <a href="#zones">Мониторинг</a><a href="#uptime">Аптайм</a><a href="#services">Сервисы</a><a href="#calc">Калькулятор</a><a href="#roadmap">Роадмап</a><a href="#news">Обновления</a>
       </nav>
     </div>
     <div class="footer__bot mono">
@@ -859,10 +910,11 @@ function mkIso(U){
 /* Hero scene: data-driven isometric grid. Layout is computed from ZONES.length,
    so adding a data center only means adding a row to ZONES. */
 const plural=(n,one,few,many)=>{const m10=n%10,m100=n%100;return m10===1&&m100!==11?one:(m10>=2&&m10<=4&&(m100<12||m100>14))?few:many;};
-function heroScene(){
+function heroScene(list){
+  list=list||ZONES;
   // Skyline: one extruded column per zone in a single row (oblique pseudo-3D).
   // Column width is derived from ZONES.length, so new data centers just narrow the columns.
-  const N=ZONES.length, VW=640, VH=320, FLOOR=262, PADL=8, PADR=28, HMAX=196;
+  const N=list.length, VW=640, VH=320, FLOOR=262, PADL=8, PADR=28, HMAX=196;
   const slot=(VW-PADL-PADR)/N;
   const bw=Math.min(54,slot*.58), dx=Math.min(20,slot*.24), dy=dx*.62;
   const f=n=>n.toFixed(1);
@@ -875,15 +927,15 @@ function heroScene(){
   const busY=FLOOR+6-fd*.31, bx0=PADL, bx1=PADL+(N-1)*slot+(slot-dx)/2+dx/2;
   out+=`<path class="wire" id="wire0" d="M${f(fx0)} ${f(busY)} L${f(bx1+bw/2)} ${f(busY)}"/>`;
   if(!reduce){for(let k=0;k<3;k++)out+=`<circle class="packet" r="2.2"><animateMotion dur="${(3+k*.7).toFixed(1)}s" begin="-${(k*1.1+.5).toFixed(1)}s" repeatCount="indefinite"><mpath href="#wire0"/></animateMotion></circle>`;}
-  const pinned=new Set(N<=10?ZONES.map(z=>z.id):[...ZONES].sort((a,b)=>b.max-a.max).slice(0,3).map(z=>z.id));
+  const pinned=new Set(N<=10?list.map(z=>z.id):[...list].sort((a,b)=>b.max-a.max).slice(0,3).map(z=>z.id));
   const showCodes=slot>=24;
   let labels='';
-  ZONES.forEach((z,i)=>{
+  list.forEach((z,i)=>{
     const x=PADL+i*slot+(slot-bw-dx)/2, h=14+z.max/100*HMAX, ah=Math.max(3,z.avg/100*HMAX), top=FLOOR-h;
     let g='';
     g+=`<polygon class="f-right" points="${f(x+bw)},${f(FLOOR)} ${f(x+bw+dx)},${f(FLOOR-dy)} ${f(x+bw+dx)},${f(top-dy)} ${f(x+bw)},${f(top)}"/>`;
     g+=`<polygon class="f-left" points="${f(x)},${f(FLOOR)} ${f(x+bw)},${f(FLOOR)} ${f(x+bw)},${f(top)} ${f(x)},${f(top)}"/>`;
-    g+=`<rect class="avgfill" x="${f(x)}" y="${f(FLOOR-ah)}" width="${f(bw)}" height="${f(ah)}"/>`;
+    g+=`<rect class="avgfill lvl-${lvl(z.avg)}" x="${f(x)}" y="${f(FLOOR-ah)}" width="${f(bw)}" height="${f(ah)}"/>`;
     g+=`<polygon class="f-top" points="${f(x)},${f(top)} ${f(x+bw)},${f(top)} ${f(x+bw+dx)},${f(top-dy)} ${f(x+dx)},${f(top-dy)}"/>`;
     for(let y=FLOOR-9;y>top+4;y-=9)g+=`<line class="rack" x1="${f(x+2)}" y1="${f(y)}" x2="${f(x+bw-2)}" y2="${f(y)}"/>`;
     for(let k=0,y=FLOOR-4.5;y>top+4;k++,y-=9){if((k*7+i*3)%3===0)g+=`<rect class="led" x="${f(x+bw*.16)}" y="${f(y-.7)}" width="2.4" height="1.4"/>`;if((k*5+i)%4===1)g+=`<rect class="led" x="${f(x+bw*.72)}" y="${f(y-.7)}" width="2.4" height="1.4"/>`;}
@@ -895,23 +947,27 @@ function heroScene(){
     labels+=`<g class="tlabel ${(slot>=22||pinned.has(z.id))?'pin':''}" data-zone="${z.id}" pointer-events="none"><text class="val" x="${f(cx)}" y="${f(ly)}" text-anchor="middle" font-size="${f(fs)}">${z.max}<tspan font-size="${f(fs*.58)}" dx="1">%</tspan></text></g>`;
   });
   $('#heroScene').innerHTML=`<svg class="iso-svg" viewBox="0 -6 ${VW+12} ${VH}" role="img" aria-hidden="true">${out}${labels}</svg>`;
-  $('#statZones').textContent=N;
-  $('#statZonesK').textContent=plural(N,'зона доступности','зоны доступности','зон доступности');
 }
 
 /* Hero card */
 function meters(rows){
-  return rows.map(([k,v,cls])=>`<div class="meter"><span class="meter__name">${k}</span><span class="meter__val tnum">${v}%</span><span class="meter__bar"><i class="${cls||''}" style="width:${v}%"></i></span></div>`).join('');
+  return rows.map(([k,v])=>`<div class="meter"><span class="meter__name">${k}</span><span class="meter__val tnum">${v}%</span><span class="meter__bar"><i class="lvl-${lvl(v)}" style="width:${v}%"></i></span></div>`).join('');
 }
+const ENV_NAME={all:'Все окружения',stage:'Stage',prod:'Prod'};
+const envZones=()=>envF==='all'?ZONES:ZONES.filter(z=>z.hosts.some(h=>hostEnv(h)===envF));
 function cardPlatform(){
-  $('#hcTitle').textContent='Платформа целиком';
-  $('#hcSub').textContent='Все окружения · '+ZONES.length+' '+plural(ZONES.length,'зона','зоны','зон')+' · загрузка гипервизоров';
-  $('#hcMeters').innerHTML=meters([['Пик',PLATFORM.max,'lvl-'+lvl(PLATFORM.max)],['Среднее',PLATFORM.avg],['CPU',PLATFORM.cpu],['RAM',PLATFORM.ram],['Диски',PLATFORM.disk]]);
+  const list=envZones(), n=list.length;
+  // "all" = platform totals; per environment = aggregate of its zones (until the API returns per-env metrics)
+  const avgOf=k=>Math.round(list.reduce((a,z)=>a+z[k],0)/n);
+  const m=envF==='all'?PLATFORM:{max:Math.max(...list.map(z=>z.max)),avg:avgOf('avg'),cpu:avgOf('cpu'),ram:avgOf('ram'),disk:avgOf('disk')};
+  $('#hcTitle').textContent=envF==='all'?'Платформа целиком':'Окружение '+ENV_NAME[envF];
+  $('#hcSub').textContent=ENV_NAME[envF]+' · '+n+' '+plural(n,'зона','зоны','зон');
+  $('#hcMeters').innerHTML=meters([['Пик',m.max],['Среднее',m.avg],['CPU',m.cpu],['RAM',m.ram],['Диски',m.disk]]);
 }
 function cardZone(z){
   $('#hcTitle').textContent=z.name;
   $('#hcSub').textContent=z.hosts.length+(z.hosts.length===1?' хост':' хоста')+' · '+z.hosts[0];
-  $('#hcMeters').innerHTML=meters([['Пик',z.max,'lvl-'+lvl(z.max)],['Среднее',z.avg],['CPU',z.cpu],['RAM',z.ram],['Диски',z.disk]]);
+  $('#hcMeters').innerHTML=meters([['Пик',z.max],['Среднее',z.avg],['CPU',z.cpu],['RAM',z.ram],['Диски',z.disk]]);
 }
 function bindTowers(){
   const towers=$$('.tower');
@@ -923,20 +979,27 @@ function bindTowers(){
     t.addEventListener('click',()=>on(t));
     t.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();on(t);}});
   });
-  $('#heroScene').addEventListener('mouseleave',()=>{towers.forEach(x=>x.classList.remove('is-on'));labels.forEach(l=>l.classList.remove('is-on'));cardPlatform();});
+  $('#heroScene').onmouseleave=()=>{towers.forEach(x=>x.classList.remove('is-on'));labels.forEach(l=>l.classList.remove('is-on'));cardPlatform();};
 }
 
 /* ---------- ZONES GRID ---------- */
+const LVL_WORD={ok:'Свободно',mid:'Умеренно',high:'Плотно'};
+
 let envF='all',sortF='free';
+function setEnv(v){
+  envF=v;
+  ['#envSeg','#heroEnv'].forEach(id=>$$(id+' button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.env===v))));
+  heroScene(envZones());bindTowers();cardPlatform();renderZones();
+}
 function renderZones(){
   let list=ZONES.map(z=>({...z,vis:envF==='all'?z.hosts:z.hosts.filter(h=>hostEnv(h)===envF)})).filter(z=>z.vis.length);
   list.sort(sortF==='name'?(a,b)=>a.name.localeCompare(b.name,'ru'):(a,b)=>a.max-b.max);
   const html=list.map(z=>{const L=lvl(z.max);return `<article class="zone">
-    <div class="zone__head"><div><div class="zone__name">${esc(z.name)}</div><div class="zone__code mono">${z.code} · ${z.vis.length} ${z.vis.length===1?'хост':'хоста'}</div></div><span class="dot bg-${L}" title="Уровень загрузки"></span></div>
-    <div><div class="zone__big"><b class="tnum">${z.max}%</b><span class="mono">пик</span></div></div>
-    <div><div class="loadbar lvl-c-${L}"><span class="mx" style="width:${z.max}%"></span><span class="av" style="width:${z.avg}%"></span></div>
+    <div class="zone__head"><div><div class="zone__name">${esc(z.name)}</div><div class="zone__code mono">${z.code} · ${z.vis.length} ${z.vis.length===1?'хост':'хоста'}</div></div><span class="zstat zstat--${L}"><i></i>${LVL_WORD[L]}</span></div>
+    <div><div class="zone__big"><b class="tnum">${z.max}%</b><span class="mono">пиковая загрузка</span></div></div>
+    <div><div class="loadbar lvl-c-${L}"><span class="mx" style="width:${z.max}%"></span><span class="av lvl-c-${lvl(z.avg)}" style="width:${z.avg}%"></span></div>
     <div class="loadbar-legend mono" style="margin-top:6px"><span>avg ${z.avg}%</span><span>max ${z.max}%</span></div></div>
-    <div class="minis">${[['CPU',z.cpu],['RAM',z.ram],['Диски',z.disk]].map(([k,v])=>`<div><div class="mini__k mono">${k}</div><div class="mini__v tnum">${v}%</div><div class="mini__bar"><i style="width:${v}%"></i></div></div>`).join('')}</div>
+    <div class="minis">${[['CPU',z.cpu],['RAM',z.ram],['Диски',z.disk]].map(([k,v])=>`<div><div class="mini__k mono">${k}</div><div class="mini__v tnum">${v}%</div><div class="mini__bar"><i style="width:${v}%;background:var(--${lvl(v)})"></i></div></div>`).join('')}</div>
     <div class="hosts">${z.vis.map(h=>`<span class="tag">${esc(h)}</span>`).join('')}</div>
   </article>`}).join('');
   const g=$('#zonesGrid');g.innerHTML=html;
@@ -947,6 +1010,40 @@ function seg(root,attr,cb){
   $$('button',root).forEach(b=>b.addEventListener('click',()=>{
     $$('button',root).forEach(x=>x.setAttribute('aria-pressed',String(x===b)));cb(b.dataset[attr]);
   }));
+}
+
+
+/* ---------- UPTIME ----------
+   PLACEHOLDER DATA: generated sample until the status API is connected.
+   Replace UPTIME_SOURCES[].days with real daily uptime (%, oldest → newest) and incident minutes. */
+function sampleDays(seed,base){
+  let x=seed;const rnd=()=>(x=(x*16807)%2147483647)/2147483647;
+  return Array.from({length:90},()=>{const r=rnd();if(r>base+.035)return 97+rnd()*2;if(r>base)return 99.3+rnd()*.69;return 100;});
+}
+const UPTIME_SOURCES=[
+  {name:'Консоль и API · Prod',days:sampleDays(11,.95)},
+  {name:'Консоль и API · Stage',days:sampleDays(29,.92)},
+  {name:'Управляемые сервисы',days:sampleDays(47,.93)},
+  {name:'Сети и DNSaaS',days:sampleDays(83,.97)}
+];
+const dayLvl=v=>v>=100?'':v>=99?'d-mid':'d-high';
+function renderUptime(){
+  const today=new Date();
+  const dateOf=i=>{const d=new Date(today);d.setDate(d.getDate()-(89-i));return d.toLocaleDateString('ru-RU',{day:'numeric',month:'short'});};
+  const pct=v=>v.toFixed(2).replace('.',',')+'%';
+  $('#upList').innerHTML=UPTIME_SOURCES.map((src,r)=>{
+    const total=src.days.reduce((a,b)=>a+b,0)/src.days.length;
+    return `<div class="up-row">
+      <div class="up-row__head"><span class="up-row__name">${esc(src.name)}</span><span class="up-row__pct tnum"><b>${pct(total)}</b> аптайм</span></div>
+      <div class="up-bars" data-r="${r}">${src.days.map((v,i)=>`<i class="${dayLvl(v)}" data-i="${i}" title="${dateOf(i)} · ${pct(v)}"></i>`).join('')}</div>
+      <div class="up-row__foot mono"><span class="up-from-90">90 дней назад</span><span class="up-from-30">30 дней назад</span><span class="up-row__info" id="upInfo${r}"></span><span>Сегодня</span></div>
+    </div>`;}).join('');
+  $$('.up-bars').forEach(row=>{
+    const info=$('#upInfo'+row.dataset.r);
+    const show=i=>{const v=UPTIME_SOURCES[+row.dataset.r].days[i];const down=Math.round((100-v)/100*1440);info.textContent=`${dateOf(i)} · ${pct(v)}${down?` · простой ${down} мин`:' · без сбоев'}`;};
+    row.addEventListener('mouseover',e=>{if(e.target.dataset.i)show(+e.target.dataset.i);});
+    row.addEventListener('mouseleave',()=>info.textContent='');
+  });
 }
 
 /* ---------- SERVICES ---------- */
@@ -1035,7 +1132,7 @@ const SVC_SPEC={
 const PRICE={cpu:420,ram:150,nvme:8,ssd:5,backup:2.5,svcMul:1.25,stageMul:.5,rentMul:3};
 const QUOTA={cpu:64,ram:256,disk:4096,backup:1024};
 const BASE_LIMIT={cpu:16,ram:64,disk:1024};
-const DEFAULT={env:'stage',zone:'el',flavor:'M',cpu:4,ram:16,count:4,os:'debian13',diskType:'nvme',disk:100,backup:true,freq:'daily',copies:7,svcs:[{k:'postgresql',nodes:3}]};
+const DEFAULT={env:'stage',zone:'el',flavor:'M',cpu:4,ram:16,count:4,os:'debian13',diskType:'nvme',disk:100,backup:true,freq:'daily',copies:2,svcs:[{k:'postgresql',nodes:3}]};
 let S=JSON.parse(JSON.stringify(DEFAULT));
 
 const zoneInfo=()=>OPEN_ZONES[S.env].find(z=>z[0]===S.zone)||OPEN_ZONES[S.env][0];
@@ -1074,7 +1171,7 @@ function totals(){
   const vm={cpu:S.cpu*S.count,ram:S.ram*S.count,disk:S.disk*S.count};
   const sv={cpu:0,ram:0,disk:0,nodes:0};
   S.svcs.forEach(s=>{const p=SVC_SPEC[s.k];sv.cpu+=p.cpu*s.nodes;sv.ram+=p.ram*s.nodes;sv.disk+=p.disk*s.nodes;sv.nodes+=s.nodes;});
-  const backup=S.backup?Math.round(vm.disk*S.copies*(S.freq==='daily'?.15:.3)):0;
+  const backup=S.backup?vm.disk*S.copies:0;  // each copy is a full copy of VM disks
   const envMul=S.env==='stage'?PRICE.stageMul:1;
   const dP=PRICE[S.diskType];
   const cost={
@@ -1129,6 +1226,7 @@ function calc(){
   $('#cCopiesV').innerHTML=`${S.copies}<small>${S.copies===1?'копия':S.copies<5?'копии':'копий'}</small>`;
   $('#cOs').value=S.os;
   $('#cBackup').checked=S.backup;
+  $('#cCopiesHint').textContent=`Каждая копия — полный объём дисков ВМ: ${S.copies} × ${fmt(S.disk*S.count)} ГБ = ${fmt(S.disk*S.count*S.copies)} ГБ`;
   $('#cCopiesWrap').style.opacity=S.backup?1:.4;$('#cCopies').disabled=!S.backup;
   // services rows
   $('#cSvcRows').innerHTML=S.svcs.length?S.svcs.map((s,i)=>{const p=SVC_SPEC[s.k];return `<div class="svc-row">
@@ -1147,10 +1245,10 @@ function calc(){
   const q=[['vCPU',t.all.cpu,QUOTA.cpu,''],['RAM',t.all.ram,QUOTA.ram,' ГБ'],['Диски',t.all.disk,QUOTA.disk,' ГБ'],['Бэкапы',t.backup,QUOTA.backup,' ГБ']];
   const over=q.filter(x=>x[1]>x[2]);
   $('#rQuota').innerHTML=q.map(([k,v,m,u])=>`<div class="q"><span class="q__k">${k}</span><span class="q__bar"><i class="${v>m?'over':''}" style="width:${Math.min(100,v/m*100)}%"></i></span><span class="q__v tnum">${fmt(v)} / ${fmt(m)}${u}</span></div>`).join('');
-  $('#rQuotaStatus').innerHTML=over.length?`<span class="lvl-c-high">Не хватает: ${over.map(x=>x[0]).join(', ')}</span>`:`<span class="lvl-c-ok">Влезает в квоту</span>`;
+  $('#rQuotaStatus').innerHTML=over.length?`<span class="lvl-c-high">Больше квоты: ${over.map(x=>x[0]).join(', ')}</span>`:`<span class="lvl-c-ok">Влезает в квоту</span>`;
 
   const notes=[];
-  if(over.length)notes.push(['crit',`Нужна заявка <b>«Cloud / Изменение квот»</b> — превышено: ${over.map(x=>x[0]).join(', ')}.`]);
+  if(over.length)notes.push(['crit',`Нужна заявка <b>«Cloud / Изменение квот»</b> — конфигурация больше квоты по: ${over.map(x=>x[0]).join(', ')}.`]);
   if(S.cpu>BASE_LIMIT.cpu||S.ram>BASE_LIMIT.ram)notes.push(['warn',`ВМ больше базового лимита (${BASE_LIMIT.cpu} vCPU / ${BASE_LIMIT.ram} ГБ). Нужна заявка <b>«Cloud / Расширение лимитов на ресурсы ВМ»</b>.`]);
   if(S.disk>BASE_LIMIT.disk)notes.push(['warn',`Диск больше 1 ТБ — запросите расширенный лимит типа <b>«большие диски»</b>.`]);
   if(S.env==='prod'&&S.svcs.length)notes.push(['warn',`В Prod пока нельзя создавать новые кластеры управляемых сервисов. Разверните их в <b>Stage</b>.`]);
@@ -1206,12 +1304,13 @@ window.addEventListener('resize',()=>{if(window.innerWidth>1023&&!mnav.hidden){m
 if('IntersectionObserver' in window){
   const links=$$('.nav a');
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.toggle('is-active',l.getAttribute('href')==='#'+e.target.id));}}),{rootMargin:'-45% 0px -50% 0px'});
-  ['zones','services','calc','roadmap','news'].forEach(id=>io.observe(document.getElementById(id)));
+  ['zones','uptime','services','calc','roadmap','news'].forEach(id=>io.observe(document.getElementById(id)));
 }
 
 /* ---------- boot ---------- */
 heroScene();cardPlatform();bindTowers();
-seg($('#envSeg'),'env',v=>{envF=v;renderZones();});
+seg($('#envSeg'),'env',setEnv);seg($('#heroEnv'),'env',setEnv);
+renderUptime();
 seg($('#sortSeg'),'sort',v=>{sortF=v;renderZones();});
 renderZones();
 renderSvcFilters();renderSvc();
