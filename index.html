@@ -121,6 +121,8 @@ h1,h2,h3{text-wrap:balance}
 .hero__stage{position:relative;min-width:0;display:flex;flex-direction:column;justify-content:center}
 #heroScene{padding:0}
 .iso-svg .avgfill{fill:var(--accent);opacity:.5;pointer-events:none}
+.iso-svg .avgfill--top{opacity:.85}
+.iso-svg .avgfill--side{opacity:.35}
 .iso-svg .code{font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;fill:var(--body)}
 .iso-svg .val{font-family:var(--f-display);font-weight:600;fill:var(--light);letter-spacing:-.02em}
 .iso-svg .val tspan{fill:var(--muted);font-weight:500}
@@ -527,7 +529,7 @@ input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(-
   <div class="wrap">
     <div class="hero__grid">
       <div class="hero__text">
-        <h1 class="hero__title">Облако для<br>сервисов<br><em>RWB</em></h1>
+        <h1 class="hero__title">Облако&nbsp;для<br>сервисов<br><em>RWB</em></h1>
         <p class="hero__lead">Виртуальные машины, управляемые базы данных и сети внутри контура WB. Создавайте ресурсы сами — в веб-интерфейсе, через API или Terraform.</p>
         <div class="hero__actions">
           <a class="btn btn--line" href="https://cloud.tp.rwb.ru/" target="_blank" rel="noopener">Stage<svg class="ico-ext" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M5.29291 18.7071C4.90239 18.3166 4.90239 17.6834 5.29291 17.2929L14.5858 8.00003L8.5 8.00002C7.94771 8.00002 7.5 7.55231 7.5 7.00002C7.5 6.44774 7.94772 6.00002 8.5 6.00002L17 6.00004C17.2652 6.00004 17.5196 6.10539 17.7071 6.29293C17.8946 6.48047 18 6.73482 18 7.00004L18 15.5C18 16.0523 17.5523 16.5 17 16.5C16.4477 16.5 16 16.0523 16 15.5L16 9.41425L6.70712 18.7071C6.3166 19.0976 5.68343 19.0976 5.29291 18.7071Z"/></svg></a>
@@ -539,7 +541,7 @@ input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(-
         
         <aside class="hero__card" aria-live="polite">
           <div class="hc__top">
-            <div class="hc__head"><div class="hc__title" id="hcTitle">Платформа целиком</div><span class="tag tag--live">online</span></div>
+            <div class="hc__head"><div class="hc__title" id="hcTitle">Платформа целиком</div><span class="tag tag--live">работает</span></div>
             <div class="seg" role="group" aria-label="Окружение" id="heroEnv">
             <button aria-pressed="true" data-env="all">Все</button>
             <button aria-pressed="false" data-env="stage">Stage</button>
@@ -1452,10 +1454,11 @@ function heroScene(list){
   let out='';
   // floor
   const fx0=PADL-6, fx1=VW-PADR+6, fd=dx*1.6;
-  out+=`<g class="plat"><polygon class="f-top" points="${f(fx0)},${f(FLOOR+6)} ${f(fx1)},${f(FLOOR+6)} ${f(fx1+fd)},${f(FLOOR+6-fd*.62)} ${f(fx0+fd)},${f(FLOOR+6-fd*.62)}"/><polygon class="f-left" points="${f(fx0)},${f(FLOOR+6)} ${f(fx1)},${f(FLOOR+6)} ${f(fx1)},${f(FLOOR+13)} ${f(fx0)},${f(FLOOR+13)}"/><polygon class="f-right" points="${f(fx1)},${f(FLOOR+6)} ${f(fx1+fd)},${f(FLOOR+6-fd*.62)} ${f(fx1+fd)},${f(FLOOR+13-fd*.62)} ${f(fx1)},${f(FLOOR+13)}"/></g>`;
-  for(let i=0;i<=N;i++){const x=PADL+i*slot-(slot-bw-dx)/2+ (slot-bw-dx)/2 - 0;out+=`<line class="gridline" x1="${f(x)}" y1="${f(FLOOR+6)}" x2="${f(x+fd)}" y2="${f(FLOOR+6-fd*.62)}"/>`;}
+  const FY=FLOOR;
+  out+=`<g class="plat"><polygon class="f-top" points="${f(fx0)},${f(FY)} ${f(fx1)},${f(FY)} ${f(fx1+fd)},${f(FY-fd*.62)} ${f(fx0+fd)},${f(FY-fd*.62)}"/><polygon class="f-left" points="${f(fx0)},${f(FY)} ${f(fx1)},${f(FY)} ${f(fx1)},${f(FY+7)} ${f(fx0)},${f(FY+7)}"/><polygon class="f-right" points="${f(fx1)},${f(FY)} ${f(fx1+fd)},${f(FY-fd*.62)} ${f(fx1+fd)},${f(FY+7-fd*.62)} ${f(fx1)},${f(FY+7)}"/></g>`;
+  for(let i=1;i<N;i++){const x=PADL+i*slot-dx/2;out+=`<line class="gridline" x1="${f(x)}" y1="${f(FY)}" x2="${f(x+fd*.5)}" y2="${f(FY-fd*.31)}"/>`;}
   // network bus along the floor
-  const busY=FLOOR+6-fd*.31, bx0=PADL, bx1=PADL+(N-1)*slot+(slot-dx)/2+dx/2;
+  const busY=FY+2.5, bx0=PADL, bx1=PADL+(N-1)*slot+(slot-dx)/2+dx/2;
   out+=`<path class="wire" id="wire0" d="M${f(fx0)} ${f(busY)} L${f(bx1+bw/2)} ${f(busY)}"/>`;
   if(!reduce){for(let k=0;k<3;k++)out+=`<circle class="packet" r="2.2"><animateMotion dur="${(3+k*.7).toFixed(1)}s" begin="-${(k*1.1+.5).toFixed(1)}s" repeatCount="indefinite"><mpath href="#wire0"/></animateMotion></circle>`;}
   const pinned=new Set(N<=10?list.map(z=>z.id):[...list].sort((a,b)=>b.max-a.max).slice(0,3).map(z=>z.id));
@@ -1467,12 +1470,14 @@ function heroScene(list){
     g+=`<polygon class="f-right" points="${f(x+bw)},${f(FLOOR)} ${f(x+bw+dx)},${f(FLOOR-dy)} ${f(x+bw+dx)},${f(top-dy)} ${f(x+bw)},${f(top)}"/>`;
     g+=`<polygon class="f-left" points="${f(x)},${f(FLOOR)} ${f(x+bw)},${f(FLOOR)} ${f(x+bw)},${f(top)} ${f(x)},${f(top)}"/>`;
     g+=`<rect class="avgfill lvl-${lvl(z.avg)}" x="${f(x)}" y="${f(FLOOR-ah)}" width="${f(bw)}" height="${f(ah)}"/>`;
+    g+=`<polygon class="avgfill avgfill--top lvl-${lvl(z.avg)}" points="${f(x)},${f(FLOOR-ah)} ${f(x+bw)},${f(FLOOR-ah)} ${f(x+bw+dx)},${f(FLOOR-ah-dy)} ${f(x+dx)},${f(FLOOR-ah-dy)}"/>`;
+    g+=`<polygon class="avgfill avgfill--side lvl-${lvl(z.avg)}" points="${f(x+bw)},${f(FLOOR)} ${f(x+bw+dx)},${f(FLOOR-dy)} ${f(x+bw+dx)},${f(FLOOR-ah-dy)} ${f(x+bw)},${f(FLOOR-ah)}"/>`;
     g+=`<polygon class="f-top" points="${f(x)},${f(top)} ${f(x+bw)},${f(top)} ${f(x+bw+dx)},${f(top-dy)} ${f(x+dx)},${f(top-dy)}"/>`;
     for(let y=FLOOR-9;y>top+4;y-=9)g+=`<line class="rack" x1="${f(x+2)}" y1="${f(y)}" x2="${f(x+bw-2)}" y2="${f(y)}"/>`;
     for(let k=0,y=FLOOR-4.5;y>top+4;k++,y-=9){if((k*7+i*3)%3===0)g+=`<rect class="led" x="${f(x+bw*.16)}" y="${f(y-.7)}" width="2.4" height="1.4"/>`;if((k*5+i)%4===1)g+=`<rect class="led" x="${f(x+bw*.72)}" y="${f(y-.7)}" width="2.4" height="1.4"/>`;}
     const cx=x+bw/2+dx/2, cy=top-dy/2, capCls='lvl-'+lvl(z.max);
     g+=`<ellipse class="${capCls}" cx="${f(cx)}" cy="${f(cy)}" rx="${f(Math.min(4,bw*.12))}" ry="${f(Math.min(2.4,bw*.07))}"/>`;
-    if(showCodes)g+=`<text class="code" x="${f(x+bw/2+dx/2)}" y="${f(FLOOR+32)}" text-anchor="middle">${z.code}</text>`;
+    if(showCodes)g+=`<text class="code" x="${f(x+bw/2+dx/2)}" y="${f(FLOOR+26)}" text-anchor="middle">${z.code}</text>`;
     out+=`<g class="tower" tabindex="0" role="button" data-zone="${z.id}" aria-label="${esc(z.name)}: пик ${z.max}%, в среднем ${z.avg}%">${g}</g>`;
     const fs=Math.max(11,Math.min(24,slot*.32)), ly=top-dy-9;
     labels+=`<g class="tlabel ${(slot>=22||pinned.has(z.id))?'pin':''}" data-zone="${z.id}" pointer-events="none"><text class="val" x="${f(cx)}" y="${f(ly)}" text-anchor="middle" font-size="${f(fs)}">${z.max}<tspan font-size="${f(fs*.58)}" dx="1">%</tspan></text></g>`;
